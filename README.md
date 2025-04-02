@@ -1,4 +1,8 @@
 ## 프로젝트
+[요구사항 명세서](./docs/Requirements.md)   
+[시퀀스 다이어그램](./docs/Sequence.puml)   
+[클래스 다이어그램](./docs/Class.puml)   
+[ERD](./docs/ERD.puml)   
 
 ## Getting Started
 

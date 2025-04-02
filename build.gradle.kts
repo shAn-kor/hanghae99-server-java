@@ -30,6 +30,8 @@ dependencyManagement {
 }
 
 dependencies {
+	// swagger
+	implementation ("org.springdoc:springdoc-openapi-starter-webmvc-ui")
     // Spring
 	implementation("org.springframework.boot:spring-boot-starter-actuator")
 	implementation("org.springframework.boot:spring-boot-starter-data-jpa")

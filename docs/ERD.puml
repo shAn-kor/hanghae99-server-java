@@ -1,0 +1,47 @@
+@startuml
+skinparam classAttributeIconSize 0
+
+entity 유저 {
+  * 유저ID: UUID <<PK>>
+  --
+  잔액: INT
+  생성일시: DATETIME
+}
+
+entity 대기열_토큰 {
+  * 토큰ID: VARCHAR <<PK>>
+  유저ID: UUID <<FK>>
+  대기순번: INT
+  유효여부: BOOLEAN
+  발급시각: DATETIME
+}
+
+entity 예약 {
+  * 예약ID: UUID <<PK>>
+  유저ID: UUID <<FK>>
+  예약일자: DATE
+  상태: VARCHAR
+  생성일시: DATETIME
+}
+
+entity 좌석 {
+  * ID: BIGINT <<PK>>
+  예약ID: UUID <<FK>>
+  좌석번호: INT
+  좌석상태: VARCHAR
+  임시배정종료시각: DATETIME
+}
+
+entity 결제 {
+  * 결제ID: UUID <<PK>>
+  예약ID: UUID <<FK>>
+  결제금액: INT
+  결제시각: DATETIME
+}
+
+유저 ||--o{ 대기열_토큰 : ""
+유저 ||--o{ 예약 : ""
+예약 ||--o{ 좌석 : ""
+예약 ||--|| 결제 : ""
+
+@enduml
