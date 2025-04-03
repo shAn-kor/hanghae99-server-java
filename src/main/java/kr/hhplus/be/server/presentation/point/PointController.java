@@ -16,9 +16,9 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/point")
-public class PointController {
+public class PointController implements PointApi {
     @GetMapping("/getPoint")
-    public ResponseEntity<PointResponse> point(@Valid @RequestBody PointRequest pointRequest) {
+    public ResponseEntity<PointResponse> getPoint(@Valid @RequestBody PointRequest pointRequest) {
         return new ResponseEntity<>(new PointResponse(pointRequest.uuid(), 0L), HttpStatus.OK);
     }
 

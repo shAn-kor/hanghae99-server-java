@@ -9,7 +9,7 @@ import static org.springframework.http.ResponseEntity.*;
 
 @RestController
 @RequestMapping("/payment")
-public class PaymentController {
+public class PaymentController implements PaymentApi {
     @PostMapping("/pay")
     public BodyBuilder point(@Valid @RequestBody PaymentRequest request) {
         return ResponseEntity.ok();

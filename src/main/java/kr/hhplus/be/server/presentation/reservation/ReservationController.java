@@ -11,7 +11,7 @@ import static org.springframework.http.ResponseEntity.*;
 
 @RestController
 @RequestMapping("/reservation")
-public class ReservationController {
+public class ReservationController implements ReservationApi {
     @PostMapping("/reserve")
     public BodyBuilder reserve(@Valid @RequestBody ReservationRequest request) {
         return ok();

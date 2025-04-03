@@ -11,7 +11,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/seat")
-public class SeatController {
+public class SeatController implements SeatApi {
     @GetMapping("/emptySeatList")
     public ResponseEntity<List<Integer>> emptySeatList(@Valid @RequestBody SeatRequest seatRequest) {
         List<Integer> list = new ArrayList<>();

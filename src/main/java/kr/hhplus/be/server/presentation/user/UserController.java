@@ -11,7 +11,7 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/user")
-public class UserController {
+public class UserController implements UserApi {
     @PostMapping("/uuid")
     public ResponseEntity<UserResponse> getUuid(@Valid @RequestBody UserRequest user) {
         return new ResponseEntity<>(new UserResponse(UUID.randomUUID()), HttpStatus.OK);

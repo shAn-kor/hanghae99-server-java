@@ -9,7 +9,7 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/token")
-public class TokenController {
+public class TokenController implements TokenApi {
     @GetMapping("/getToken")
     public ResponseEntity<String> getToken(@RequestParam UUID uuid) {
         return ResponseEntity.ok("token");

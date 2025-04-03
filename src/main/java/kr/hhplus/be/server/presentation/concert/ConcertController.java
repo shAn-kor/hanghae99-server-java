@@ -1,5 +1,6 @@
 package kr.hhplus.be.server.presentation.concert;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import kr.hhplus.be.server.presentation.concert.object.ConcertRequest;
 import kr.hhplus.be.server.presentation.concert.object.ConcertResponse;
@@ -17,7 +18,7 @@ import static org.springframework.http.ResponseEntity.ok;
 
 @RestController
 @RequestMapping("/concert")
-public class ConcertController {
+public class ConcertController implements ConcertApi {
     @GetMapping("/concertList")
     public ResponseEntity<List<ConcertResponse>> concertList() {
         List<ConcertResponse> responseList = new ArrayList<>();
