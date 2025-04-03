@@ -1,36 +1,73 @@
 @startuml
 skinparam classAttributeIconSize 0
 
-package "도메인 모델" {
+class 공연 {
+  - 공연ID: Long
+  - 공연이름: String
+  - 아티스트: String
+}
+
+class 공연장 {
+  - 공연장ID: Long
+  - 공연장이름: String
+  - 주소: String
+  - 좌석수: int
+}
+
+class 공연날짜 {
+  - 공연일ID: Long
+  - 공연ID: Long
+  - 공연장ID: Long
+  - 공연날짜: DateTime
+}
 
 class 유저 {
   - 유저ID: UUID
-  - 잔액: int
-  + 충전(금액: int)
-  + 차감(금액: int)
+  - 전화번호: String
+  - 생성일시: DateTime
+}
+
+class 포인트 {
+  - 포인트ID: Long
+  - 유저ID: UUID
+  - 잔액: Long
+}
+
+class 포인트내역 {
+  - 내역ID: Long
+  - 포인트ID: Long
+  - 타입: String
+  - 포인트: Long
+  - 발생일시: DateTime
 }
 
 class 대기열토큰 {
   - 토큰ID: String
   - 유저ID: UUID
   - 대기순번: int
+  - 유효여부: Boolean
   - 발급시각: DateTime
-  + 유효한가(): boolean
 }
 
 class 예약 {
   - 예약ID: UUID
   - 유저ID: UUID
-  - 예약일자: 날짜
-  - 좌석목록: List<좌석>
-  - 상태: 예약상태
-  + 만료여부확인(): boolean
+  - 예약일자: Date
+  - 상태: String
+  - 생성일시: DateTime
 }
 
 class 좌석 {
+  - ID: Long
+  - 예약ID: UUID
+  - 공연날짜ID: Long
   - 좌석번호: int
-  - 상태: 좌석상태
-  - 임시예약종료시각: DateTime
+  - 좌석상태: String
+}
+
+class 예약아이템 {
+  - 예약ID: UUID
+  - 좌석ID: Long
 }
 
 class 결제 {
@@ -40,22 +77,16 @@ class 결제 {
   - 결제시각: DateTime
 }
 
-enum 예약상태 {
-  임시
-  확정
-  만료됨
-}
-
-enum 좌석상태 {
-  사용가능
-  임시예약중
-  예약완료
-}
-
+공연 "1" -- "0..*" 공연날짜
+공연장 "1" -- "0..*" 공연날짜
+유저 "1" -- "1" 포인트
+포인트 "1" -- "0..*" 포인트내역
 유저 "1" -- "0..*" 대기열토큰
 유저 "1" -- "0..*" 예약
-예약 "1" -- "1..4" 좌석
-예약 "1" -- "0..1" 결제
+예약 "1" -- "1..*" 예약아이템
+예약아이템 "1" -- "1" 좌석
+공연날짜 "1" -- "0..*" 좌석
+예약 "1" -- "1" 결제
+결제 "1" -- "1..*" 포인트내역
 
-}
 @enduml
