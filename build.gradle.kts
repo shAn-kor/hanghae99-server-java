@@ -30,6 +30,8 @@ dependencyManagement {
 }
 
 dependencies {
+	// swagger
+	implementation ("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.2.0")
     // Spring
 	implementation("org.springframework.boot:spring-boot-starter-actuator")
 	implementation("org.springframework.boot:spring-boot-starter-data-jpa")
@@ -37,6 +39,13 @@ dependencies {
 
     // DB
 	runtimeOnly("com.mysql:mysql-connector-j")
+
+	// Lombok
+	compileOnly("org.projectlombok:lombok:1.18.30") // 최신 버전으로 사용
+	annotationProcessor("org.projectlombok:lombok:1.18.30")
+
+	testCompileOnly("org.projectlombok:lombok:1.18.30")
+	testAnnotationProcessor("org.projectlombok:lombok:1.18.30")
 
     // Test
     testImplementation("org.springframework.boot:spring-boot-starter-test")

@@ -1,0 +1,102 @@
+@startuml
+skinparam classAttributeIconSize 0
+
+entity 공연 {
+    *공연ID: BIGINT <<PK>>
+    --
+    공연이름: VARCHAR
+    아티스트: VARCHAR
+}
+
+entity 공연장 {
+    *공연장ID: BIGINT <<PK>>
+    --
+    공연장이름: VARCHAR
+    주소: VARCHAR
+    좌석수: INT
+}
+
+entity 공연_날짜 {
+    *공연일ID: BIGINT <<PK>>
+    *공연ID: BIGINT <<PK>>
+    *공연장ID: BIGINT <<PK>>
+    --
+    공연날짜: DATETIME
+}
+
+entity 유저 {
+  * 유저ID: UUID <<PK>>
+  --
+  전화번호: VARCHAR
+  생성일시: DATETIME
+}
+
+entity 포인트_내역 {
+    * 내역ID: BIGINT <<PK>>
+    * 포인트ID: BIGINT <<PK>>
+    --
+    타입: VARCHAR
+    포인트: LONG
+    발생일시: DATETIME
+}
+
+entity 포인트 {
+    * 포인트ID : BIGINT <<PK>>
+    --
+    유저ID : UUID <<FK>>
+    잔액 : LONG
+}
+
+entity 대기열_토큰 {
+  * 토큰ID: VARCHAR <<PK>>
+  --
+  유저ID: UUID <<FK>>
+  대기순번: INT
+  유효여부: BOOLEAN
+  발급시각: DATETIME
+}
+
+entity 예약 {
+  * 예약ID: UUID <<PK>>
+  --
+  유저ID: UUID <<FK>>
+  예약일자: DATE
+  상태: VARCHAR
+  생성일시: DATETIME
+}
+
+entity 예약_아이템 {
+  * 예약ID: UUID <<FK>>
+  * 좌석ID: BIGINT <<FK>>
+}
+
+entity 좌석 {
+  * ID: BIGINT <<PK>>
+  --
+  예약ID: UUID <<FK>>
+  공연날짜ID: BIGINT <<FK>>
+  좌석번호: INT
+  좌석상태: VARCHAR
+}
+
+entity 결제 {
+  * 결제ID: UUID <<PK>>
+  --
+  예약ID: UUID <<FK>>
+  결제금액: INT
+  결제시각: DATETIME
+}
+
+공연 ||--o{ 공연_날짜 : ""
+공연장 ||--o{ 공연_날짜 : ""
+유저 ||--o{ 대기열_토큰 : ""
+유저 ||--|| 포인트 : ""
+포인트 ||--o{ 포인트_내역 : ""
+유저 ||--o{ 예약 : ""
+예약 ||--o{ 예약_아이템 : ""
+예약_아이템 ||--|| 좌석 : ""
+공연_날짜 ||--o{ 좌석 : ""
+예약 ||--|| 결제 : ""
+결제 ||--o{ 포인트_내역
+
+@enduml
