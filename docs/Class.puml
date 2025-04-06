@@ -1,92 +1,92 @@
 @startuml
 skinparam classAttributeIconSize 0
 
-class 공연 {
-  - 공연ID: Long
-  - 공연이름: String
-  - 아티스트: String
+class Concert {
+  - concertId: Long
+  - name: String
+  - artist: String
 }
 
-class 공연장 {
-  - 공연장ID: Long
-  - 공연장이름: String
-  - 주소: String
-  - 좌석수: int
+class Venue {
+  - venueId: Long
+  - name: String
+  - address: String
+  - seatCount: int
 }
 
-class 공연날짜 {
-  - 공연일ID: Long
-  - 공연ID: Long
-  - 공연장ID: Long
-  - 공연날짜: DateTime
+class ConcertDate {
+  - concertDateId: Long
+  - concertId: Long
+  - venueId: Long
+  - date: DateTime
 }
 
-class 유저 {
-  - 유저ID: UUID
-  - 전화번호: String
-  - 생성일시: DateTime
+class User {
+  - userId: UUID
+  - phone: String
+  - createdAt: DateTime
 }
 
-class 포인트 {
-  - 포인트ID: Long
-  - 유저ID: UUID
-  - 잔액: Long
+class Point {
+  - pointId: Long
+  - userId: UUID
+  - balance: Long
 }
 
-class 포인트내역 {
-  - 내역ID: Long
-  - 포인트ID: Long
-  - 타입: String
-  - 포인트: Long
-  - 발생일시: DateTime
+class PointHistory {
+  - historyId: Long
+  - pointId: Long
+  - type: String
+  - amount: Long
+  - createdAt: DateTime
 }
 
-class 대기열토큰 {
-  - 토큰ID: String
-  - 유저ID: UUID
-  - 대기순번: int
-  - 유효여부: Boolean
-  - 발급시각: DateTime
+class QueueToken {
+  - tokenId: String
+  - userId: UUID
+  - position: int
+  - isValid: Boolean
+  - issuedAt: DateTime
 }
 
-class 예약 {
-  - 예약ID: UUID
-  - 유저ID: UUID
-  - 예약일자: Date
-  - 상태: String
-  - 생성일시: DateTime
+class Reservation {
+  - reservationId: UUID
+  - userId: UUID
+  - reservationDate: Date
+  - status: String
+  - createdAt: DateTime
 }
 
-class 좌석 {
-  - ID: Long
-  - 예약ID: UUID
-  - 공연날짜ID: Long
-  - 좌석번호: int
-  - 좌석상태: String
+class Seat {
+  - seatId: Long
+  - reservationId: UUID
+  - concertDateId: Long
+  - seatNumber: int
+  - seatStatus: String
 }
 
-class 예약아이템 {
-  - 예약ID: UUID
-  - 좌석ID: Long
+class ReservationItem {
+  - reservationId: UUID
+  - seatId: Long
 }
 
-class 결제 {
-  - 결제ID: UUID
-  - 예약ID: UUID
-  - 결제금액: int
-  - 결제시각: DateTime
+class Payment {
+  - paymentId: UUID
+  - reservationId: UUID
+  - amount: int
+  - paidAt: DateTime
 }
 
-공연 "1" -- "0..*" 공연날짜
-공연장 "1" -- "0..*" 공연날짜
-유저 "1" -- "1" 포인트
-포인트 "1" -- "0..*" 포인트내역
-유저 "1" -- "0..*" 대기열토큰
-유저 "1" -- "0..*" 예약
-예약 "1" -- "1..*" 예약아이템
-예약아이템 "1" -- "1" 좌석
-공연날짜 "1" -- "0..*" 좌석
-예약 "1" -- "1" 결제
-결제 "1" -- "1..*" 포인트내역
+Concert "1" -- "0..*" ConcertDate
+Venue "1" -- "0..*" ConcertDate
+User "1" -- "1" Point
+Point "1" -- "0..*" PointHistory
+User "1" -- "0..*" QueueToken
+User "1" -- "0..*" Reservation
+Reservation "1" -- "1..*" ReservationItem
+ReservationItem "1" -- "1" Seat
+ConcertDate "1" -- "0..*" Seat
+Reservation "1" -- "1" Payment
+Payment "1" -- "1..*" PointHistory
 
 @enduml
