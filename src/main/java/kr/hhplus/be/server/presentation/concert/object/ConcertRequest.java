@@ -1,13 +1,18 @@
 package kr.hhplus.be.server.presentation.concert.object;
 
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
+import kr.hhplus.be.server.domain.concert.ConcertCommand;
+import lombok.Builder;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
+@Builder
 public record ConcertRequest(
-        @NotNull Long concertId,
-        @NotNull Long hallId,
-        @NotNull LocalDateTime date
+        @Positive Long concertId,
+        @Positive Long venueId,
+        @Positive LocalDateTime date
 ) {
+    public ConcertCommand toCommand() {
+        return ConcertCommand.builder().concertId(concertId).venueId(venueId).build();
+    }
 }
