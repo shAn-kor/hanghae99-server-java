@@ -33,7 +33,7 @@ entity User {
 
 entity PointHistory {
     *history_id: BIGINT <<PK>>
-    *point_id: BIGINT <<PK>>
+    *point_id: BIGINT <<FK>>
     --
     type: VARCHAR
     amount: LONG
@@ -57,7 +57,7 @@ entity QueueToken {
 }
 
 entity Reservation {
-  *reservation_id: UUID <<PK>>
+  *reservation_id: BIGINT <<PK>>
   --
   user_id: UUID <<FK>>
   status: VARCHAR
@@ -65,7 +65,7 @@ entity Reservation {
 }
 
 entity ReservationItem {
-  *reservation_id: UUID <<FK>>
+  *reservation_id: BIGINT <<FK>>
   *seat_id: BIGINT <<FK>>
 }
 
@@ -79,9 +79,9 @@ entity Seat {
 }
 
 entity Payment {
-  *payment_id: UUID <<PK>>
+  *payment_id: BIGINT <<PK>>
   --
-  reservation_id: UUID <<FK>>
+  reservation_id: BIGINT <<FK>>
   amount: INT
   paid_at: DATETIME
 }
@@ -96,6 +96,5 @@ Reservation ||--o{ ReservationItem : ""
 ReservationItem ||--|| Seat : ""
 ConcertDate ||--o{ Seat : ""
 Reservation ||--|| Payment : ""
-Payment ||--o{ PointHistory
 
 @enduml
