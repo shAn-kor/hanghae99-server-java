@@ -13,5 +13,5 @@ public interface PaymentApi {
 
     @Operation(summary = "결제 요청", description = "예약된 좌석에 대해 포인트를 차감하여 결제합니다.")
     @PostMapping("/pay")
-    ResponseEntity.BodyBuilder point(@Valid @RequestBody PaymentRequest request);
+    ResponseEntity.BodyBuilder pay(@Valid @RequestBody PaymentRequest request);
 }
