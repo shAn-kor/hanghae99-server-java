@@ -5,10 +5,13 @@ import kr.hhplus.be.server.domain.reservation.*;
 import kr.hhplus.be.server.domain.seat.Seat;
 import kr.hhplus.be.server.domain.seat.SeatIdCommand;
 import kr.hhplus.be.server.domain.seat.SeatService;
+import kr.hhplus.be.server.domain.token.TokenCommand;
+import kr.hhplus.be.server.domain.token.TokenService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
+import java.nio.file.AccessDeniedException;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -17,8 +20,13 @@ import java.util.List;
 public class ReservationFacade {
     private final ReservationService reservationService;
     private final SeatService seatService;
+    private final TokenService tokenService;
 
-    public void reserveSeats(ReservationCriteria criteria) {
+    public void reserveSeats(ReservationCriteria criteria) throws AccessDeniedException {
+        if (!tokenService.isValid(TokenCommand.builder().userId(criteria.uuid()).build())) {
+            throw new AccessDeniedException("대기열을 통과하지 못했습니다.");
+        }
+
         List<Seat> seatList = seatService.reserveSeat(ReservationCriteria.toSeatCommand(criteria));
 
         List<ReservationItemCommand> reservationItems = seatList.stream()
