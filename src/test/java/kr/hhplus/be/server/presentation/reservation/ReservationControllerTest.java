@@ -7,6 +7,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.ResponseEntity;
 
+import java.nio.file.AccessDeniedException;
 import java.util.List;
 import java.util.UUID;
 
@@ -26,7 +27,7 @@ class ReservationControllerUnitTest {
 
     @Test
     @DisplayName("POST /reserve는 예약 요청을 처리하고 200 OK를 반환한다")
-    void reserve_success() {
+    void reserve_success() throws AccessDeniedException {
         // given
         UUID userId = UUID.randomUUID();
         ReservationRequest request = new ReservationRequest(userId, 1L, List.of(1, 2, 3));

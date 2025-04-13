@@ -5,13 +5,14 @@ import kr.hhplus.be.server.domain.reservation.ReservationItem;
 import kr.hhplus.be.server.domain.reservation.ReservationService;
 import kr.hhplus.be.server.domain.reservation.ReservationStatus;
 import kr.hhplus.be.server.domain.seat.Seat;
-import kr.hhplus.be.server.domain.seat.SeatCommand;
 import kr.hhplus.be.server.domain.seat.SeatService;
 import kr.hhplus.be.server.domain.seat.SeatStatus;
+import kr.hhplus.be.server.domain.token.TokenService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import java.nio.file.AccessDeniedException;
 import java.util.List;
 import java.util.UUID;
 
@@ -23,41 +24,44 @@ class ReservationFacadeUnitTest {
     private ReservationService reservationService;
     private SeatService seatService;
     private ReservationFacade reservationFacade;
+    private TokenService tokenService;
 
     @BeforeEach
     void setUp() {
         reservationService = mock(ReservationService.class);
         seatService = mock(SeatService.class);
-        reservationFacade = new ReservationFacade(reservationService, seatService);
+        tokenService = mock(TokenService.class);
+        reservationFacade = new ReservationFacade(reservationService, seatService, tokenService);
     }
 
     @Test
-    @DisplayName("reserveSeats()는 좌석 예약 후 ReservationCommand를 만들어 예약 서비스에 전달한다")
-    void reserveSeats_success() {
+    @DisplayName("reserveSeats()는 대기열을 통과한 유저만 예약할 수 있고 예약 서비스에 전달한다")
+    void reserveSeats_success() throws AccessDeniedException {
         // given
         UUID userId = UUID.randomUUID();
         List<Integer> seatNumbers = List.of(1, 2);
-
-        ReservationCriteria criteria = new ReservationCriteria(userId,1L, seatNumbers);
+        ReservationCriteria criteria = new ReservationCriteria(userId, 1L, seatNumbers);
 
         List<Seat> mockSeats = List.of(
                 new Seat(1L, 100L, 10, SeatStatus.EMPTY),
                 new Seat(2L, 100L, 11, SeatStatus.EMPTY)
         );
 
-        when(seatService.reserveSeat(any(SeatCommand.class))).thenReturn(mockSeats);
+        when(tokenService.isValid(any())).thenReturn(true); // ✅ 대기열 통과 처리
+        when(seatService.reserveSeat(any())).thenReturn(mockSeats);
 
         // when
         reservationFacade.reserveSeats(criteria);
 
         // then
-        verify(seatService).reserveSeat(any(SeatCommand.class));
-        verify(reservationService).reserve(argThat(command -> {
-            return command.userId().equals(userId)
-                    && command.status() == ReservationStatus.WAITING
-                    && command.items().size() == 2
-                    && command.items().get(0).seatId() == 1L;
-        }));
+        verify(tokenService).isValid(argThat(cmd -> cmd.userId().equals(userId)));
+        verify(seatService).reserveSeat(any());
+        verify(reservationService).reserve(argThat(command ->
+                command.userId().equals(userId)
+                        && command.status() == ReservationStatus.WAITING
+                        && command.items().size() == 2
+                        && command.items().get(0).seatId() == 1L
+        ));
     }
 
     @Test
