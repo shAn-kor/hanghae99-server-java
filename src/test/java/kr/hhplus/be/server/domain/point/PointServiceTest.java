@@ -46,9 +46,8 @@ class PointServiceTest {
         when(pointRepository.getPoint(userId)).thenReturn(mockPoint);
         when(mockPoint.checkPoint(command.point())).thenReturn(true);
 
-        Boolean result = pointService.checkPoint(command);
+        pointService.checkPoint(command);
 
-        assertThat(result).isTrue();
         verify(mockPoint).checkPoint(0L);
     }
 

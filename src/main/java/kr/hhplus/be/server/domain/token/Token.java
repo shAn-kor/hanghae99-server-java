@@ -10,4 +10,7 @@ public record Token (
         Boolean valid,
         LocalDateTime createdAt
 ) {
+    public Token updateValidTrue() {
+        return new Token(tokenId, userId, position, true, createdAt);
+    }
 }

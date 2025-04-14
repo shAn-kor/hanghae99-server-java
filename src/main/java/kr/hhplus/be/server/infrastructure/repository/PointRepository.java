@@ -12,4 +12,6 @@ public interface PointRepository {
     void use(UUID userId, Long amount);
 
     Point getPoint(UUID userId);
+
+    void save(Point point);
 }

@@ -5,8 +5,8 @@ import kr.hhplus.be.server.domain.Venue.Venue;
 import kr.hhplus.be.server.domain.Venue.VenueService;
 import kr.hhplus.be.server.domain.concert.Concert;
 import kr.hhplus.be.server.domain.concert.ConcertService;
-import kr.hhplus.be.server.domain.concertdate.ConcertDate;
-import kr.hhplus.be.server.domain.concertdate.ConcertDateService;
+import kr.hhplus.be.server.domain.concertschedule.ConcertSchedule;
+import kr.hhplus.be.server.domain.concertschedule.ConcertScheduleService;
 import kr.hhplus.be.server.presentation.concert.object.ConcertDateResponse;
 import kr.hhplus.be.server.presentation.concert.object.ConcertRequest;
 import kr.hhplus.be.server.presentation.concert.object.ConcertResponse;
@@ -24,7 +24,7 @@ import java.util.List;
 public class ConcertController implements ConcertApi {
     private final ConcertService concertService;
     private final VenueService venueService;
-    private final ConcertDateService concertDateService;
+    private final ConcertScheduleService concertScheduleService;
 
     @GetMapping("/concertList")
     public ResponseEntity<List<ConcertResponse>> concertList() {
@@ -42,8 +42,8 @@ public class ConcertController implements ConcertApi {
 
     @PostMapping("/dateList")
     public ResponseEntity<List<ConcertDateResponse>> dateList(@Valid @RequestBody ConcertRequest request) {
-        List<ConcertDate> concertDateList = concertDateService.getConcertDates(request.toCommand());
-        List<ConcertDateResponse> responseList = ConcertDateResponse.from(concertDateList);
+        List<ConcertSchedule> concertScheduleList = concertScheduleService.getConcertDates(request.toCommand());
+        List<ConcertDateResponse> responseList = ConcertDateResponse.from(concertScheduleList);
         return new ResponseEntity<>(responseList, HttpStatus.OK);
     }
 }

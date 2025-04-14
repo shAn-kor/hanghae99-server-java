@@ -22,6 +22,18 @@ public record Point(
     }
 
     public Boolean checkPoint(Long amount) {
-        return amount <= balance;
+        return amount > balance;
+    }
+
+    public Point charge(Long point) {
+        return new Point(this.pointId, this.userId, this.balance + point);
+    }
+
+    public Point use(Long point) {
+        long newBalance = this.balance - point;
+        if (newBalance < 0) {
+            throw new IllegalArgumentException("balance must be greater than 0");
+        }
+        return new Point(this.pointId, this.userId, newBalance);
     }
 }

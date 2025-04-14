@@ -1,7 +1,7 @@
-package kr.hhplus.be.server.domain.concertdate;
+package kr.hhplus.be.server.domain.concertschedule;
 
 import kr.hhplus.be.server.domain.concert.ConcertCommand;
-import kr.hhplus.be.server.infrastructure.repository.ConcertDateRepository;
+import kr.hhplus.be.server.infrastructure.repository.ConcertScheduleRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -12,15 +12,15 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
 
-class ConcertDateServiceTest {
+class ConcertScheduleServiceTest {
 
-    private ConcertDateRepository concertDateRepository;
-    private ConcertDateService concertDateService;
+    private ConcertScheduleRepository concertScheduleRepository;
+    private ConcertScheduleService concertScheduleService;
 
     @BeforeEach
     void setUp() {
-        concertDateRepository = mock(ConcertDateRepository.class);
-        concertDateService = new ConcertDateService(concertDateRepository);
+        concertScheduleRepository = mock(ConcertScheduleRepository.class);
+        concertScheduleService = new ConcertScheduleService(concertScheduleRepository);
     }
 
     @Test
@@ -30,27 +30,27 @@ class ConcertDateServiceTest {
         Long concertId = 1L;
         ConcertCommand command = new ConcertCommand(concertId, 1L);
 
-        List<ConcertDate> mockResult = List.of(
-                ConcertDate.builder()
+        List<ConcertSchedule> mockResult = List.of(
+                ConcertSchedule.builder()
                         .concertId(concertId)
                         .venueId(100L)
                         .concertDate(LocalDateTime.of(2025, 5, 10, 20, 0))
                         .build(),
-                ConcertDate.builder()
+                ConcertSchedule.builder()
                         .concertId(concertId)
                         .venueId(101L)
                         .concertDate(LocalDateTime.of(2025, 5, 11, 20, 0))
                         .build()
         );
 
-        when(concertDateRepository.getConcertDates(concertId)).thenReturn(mockResult);
+        when(concertScheduleRepository.getConcertDates(concertId)).thenReturn(mockResult);
 
         // when
-        List<ConcertDate> result = concertDateService.getConcertDates(command);
+        List<ConcertSchedule> result = concertScheduleService.getConcertDates(command);
 
         // then
         assertThat(result).hasSize(2);
         assertThat(result).isEqualTo(mockResult);
-        verify(concertDateRepository, times(1)).getConcertDates(concertId);
+        verify(concertScheduleRepository, times(1)).getConcertDates(concertId);
     }
 }

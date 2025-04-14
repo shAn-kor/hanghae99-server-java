@@ -1,16 +1,16 @@
-package kr.hhplus.be.server.domain.concertdate;
+package kr.hhplus.be.server.domain.concertschedule;
 
 import lombok.Builder;
 
 import java.time.LocalDateTime;
 
 @Builder
-public record ConcertDate(
+public record ConcertSchedule(
         Long concertId,
         Long venueId,
         LocalDateTime concertDate
 ) {
-    public ConcertDate {
+    public ConcertSchedule {
         if (concertId == null) {
             throw new IllegalArgumentException("concertId must not be null");
         }

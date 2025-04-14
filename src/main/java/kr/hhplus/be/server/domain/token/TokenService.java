@@ -25,7 +25,8 @@ public class TokenService {
         List<Token> tokens = tokenRepository.findAll();
         for (Token token : tokens) {
             if (token.position() <= 50) {
-                tokenRepository.updateValid(token.tokenId(), true);
+                Token newToken = token.updateValidTrue();
+                tokenRepository.save(newToken);
             }
         }
     }

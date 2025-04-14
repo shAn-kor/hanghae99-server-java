@@ -1,6 +1,6 @@
 package kr.hhplus.be.server.presentation.concert.object;
 
-import kr.hhplus.be.server.domain.concertdate.ConcertDate;
+import kr.hhplus.be.server.domain.concertschedule.ConcertSchedule;
 import lombok.Builder;
 
 import java.time.LocalDateTime;
@@ -12,15 +12,15 @@ public record ConcertDateResponse(
         Long venueId,
         LocalDateTime concertDate
 ) {
-    public static ConcertDateResponse from (ConcertDate concertDate) {
+    public static ConcertDateResponse from (ConcertSchedule concertSchedule) {
         return ConcertDateResponse.builder()
-                .concertId(concertDate.concertId())
-                .venueId(concertDate.venueId())
-                .concertDate(concertDate.concertDate())
+                .concertId(concertSchedule.concertId())
+                .venueId(concertSchedule.venueId())
+                .concertDate(concertSchedule.concertDate())
                 .build();
     }
 
-    public static List<ConcertDateResponse> from (List<ConcertDate> concertDates) {
-        return concertDates.stream().map(ConcertDateResponse::from).toList();
+    public static List<ConcertDateResponse> from (List<ConcertSchedule> concertSchedules) {
+        return concertSchedules.stream().map(ConcertDateResponse::from).toList();
     }
 }

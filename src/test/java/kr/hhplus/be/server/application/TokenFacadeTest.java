@@ -48,7 +48,6 @@ class TokenFacadeTest {
         Token token = new Token(tokenId, userId, 5, true, LocalDateTime.now());
 
         when(userService.getUserId(any(UserCommand.class))).thenReturn(userId);
-        when(pointService.checkPoint(any(PointCommand.class))).thenReturn(true);
         when(tokenService.generateToken(any(TokenCommand.class))).thenReturn(token);
 
         // when
@@ -75,7 +74,6 @@ class TokenFacadeTest {
         UUID userId = UUID.randomUUID();
 
         when(userService.getUserId(any())).thenReturn(userId);
-        when(pointService.checkPoint(any())).thenReturn(false);
 
         // when & then
         assertThatThrownBy(() -> tokenFacade.createToken(criteria))

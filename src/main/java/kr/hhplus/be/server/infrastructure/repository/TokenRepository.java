@@ -15,4 +15,6 @@ public interface TokenRepository {
     void updateValid(UUID uuid, boolean b);
 
     boolean checkValid(UUID uuid);
+
+    void save(Token token);
 }

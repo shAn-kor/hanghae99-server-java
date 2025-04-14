@@ -27,9 +27,7 @@ public class TokenFacade {
                 UserCommand.builder().phoneNumber(criteria.phoneNumber()).build()
         );
 
-        if (!pointService.checkPoint(PointCommand.builder().userId(userId).build())) {
-            throw new InsufficientBalanceException();
-        }
+        pointService.checkPoint(PointCommand.builder().userId(userId).build());
 
         Token token = tokenService.generateToken(TokenCommand.builder().userId(userId).build());
 

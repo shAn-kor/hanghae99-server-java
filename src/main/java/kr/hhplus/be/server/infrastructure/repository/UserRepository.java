@@ -1,7 +1,7 @@
 package kr.hhplus.be.server.infrastructure.repository;
 
-import java.util.UUID;
+import kr.hhplus.be.server.domain.user.User;
 
 public interface UserRepository {
-    UUID getUuidByPhone(String phoneNumber);
+    User getUser(String phoneNumber);
 }

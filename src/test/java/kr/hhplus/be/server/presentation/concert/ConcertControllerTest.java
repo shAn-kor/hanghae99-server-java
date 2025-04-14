@@ -4,8 +4,8 @@ import kr.hhplus.be.server.domain.Venue.Venue;
 import kr.hhplus.be.server.domain.Venue.VenueService;
 import kr.hhplus.be.server.domain.concert.Concert;
 import kr.hhplus.be.server.domain.concert.ConcertService;
-import kr.hhplus.be.server.domain.concertdate.ConcertDate;
-import kr.hhplus.be.server.domain.concertdate.ConcertDateService;
+import kr.hhplus.be.server.domain.concertschedule.ConcertSchedule;
+import kr.hhplus.be.server.domain.concertschedule.ConcertScheduleService;
 import kr.hhplus.be.server.presentation.concert.object.ConcertDateResponse;
 import kr.hhplus.be.server.presentation.concert.object.ConcertRequest;
 import kr.hhplus.be.server.presentation.concert.object.ConcertResponse;
@@ -25,15 +25,15 @@ class ConcertControllerUnitTest {
 
     private ConcertService concertService;
     private VenueService venueService;
-    private ConcertDateService concertDateService;
+    private ConcertScheduleService concertScheduleService;
     private ConcertController controller;
 
     @BeforeEach
     void setUp() {
         concertService = mock(ConcertService.class);
         venueService = mock(VenueService.class);
-        concertDateService = mock(ConcertDateService.class);
-        controller = new ConcertController(concertService, venueService, concertDateService);
+        concertScheduleService = mock(ConcertScheduleService.class);
+        controller = new ConcertController(concertService, venueService, concertScheduleService);
     }
 
     @Test
@@ -79,14 +79,14 @@ class ConcertControllerUnitTest {
     void dateList_success() {
         // given
         ConcertRequest request = ConcertRequest.builder().concertId(1L).build();
-        List<ConcertDate> dates = List.of(
-                ConcertDate.builder()
+        List<ConcertSchedule> dates = List.of(
+                ConcertSchedule.builder()
                         .concertId(1L)
                         .venueId(1L)
                         .concertDate(LocalDateTime.of(2025, 5, 1, 20, 0))
                         .build()
         );
-        when(concertDateService.getConcertDates(request.toCommand())).thenReturn(dates);
+        when(concertScheduleService.getConcertDates(request.toCommand())).thenReturn(dates);
 
         // when
         ResponseEntity<List<ConcertDateResponse>> response = controller.dateList(request);
