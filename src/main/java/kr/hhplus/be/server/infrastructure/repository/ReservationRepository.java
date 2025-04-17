@@ -19,4 +19,6 @@ public interface ReservationRepository {
     List<Reservation> findByUserId(UUID userId);
 
     List<ReservationItem> getItems(Long reservationId);
+
+    List<ReservationItem> getDeadItems(LocalDateTime deadline);
 }

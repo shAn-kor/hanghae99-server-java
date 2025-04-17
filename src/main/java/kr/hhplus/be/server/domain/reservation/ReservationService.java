@@ -7,7 +7,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.LinkedList;
 import java.util.List;
 
 @Service
@@ -32,15 +31,7 @@ public class ReservationService {
     }
 
     public List<ReservationItem> getDeadItems(DeadlineItemCriteria deadlineItemCriteria) {
-        List<Reservation> deadReservations = reservationRepository.getDeadReservations(deadlineItemCriteria.deadline());
-
-        List<ReservationItem> deadItems = new LinkedList<>();
-        for (Reservation reservation : deadReservations) {
-            List<ReservationItem> deadReservationItems = reservationRepository.getItems(reservation.getReservationId());
-            deadItems.addAll(deadReservationItems);
-        }
-
-        return deadItems;
+        return reservationRepository.getDeadItems(deadlineItemCriteria.deadline());
     }
 
     @Transactional(readOnly = true)

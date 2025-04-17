@@ -10,6 +10,8 @@ public interface TokenRepository {
 
     List<Token> findAll();
 
+    List<Token> findValidTokens();
+
     Token save(Token token);
 
     Integer getMaxPosition();

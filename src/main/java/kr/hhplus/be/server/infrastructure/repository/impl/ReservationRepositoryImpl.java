@@ -47,4 +47,9 @@ public class ReservationRepositoryImpl implements ReservationRepository {
     public List<ReservationItem> getItems(Long reservationId) {
         return jpaReservationItemRepository.findByReservationId(reservationId);
     }
+
+    @Override
+    public List<ReservationItem> getDeadItems(LocalDateTime deadline) {
+        return jpaReservationItemRepository.getDeadItems(deadline);
+    }
 }

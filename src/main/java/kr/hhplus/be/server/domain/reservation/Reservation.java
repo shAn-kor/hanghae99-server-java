@@ -10,6 +10,9 @@ import java.util.UUID;
 @Getter
 @Setter
 @Entity(name = "reservation")
+@Table(name = "reservation", indexes = {
+        @Index(name = "idx_reservation_deadline_status", columnList = "status, created_at")
+})
 @ToString
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Reservation {
