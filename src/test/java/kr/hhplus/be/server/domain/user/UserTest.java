@@ -18,7 +18,7 @@ class UserTest {
                 .phoneNumber("010-1234-5678")
                 .build();
 
-        assertThat(user.phoneNumber()).isEqualTo("010-1234-5678");
+        assertThat(user.getPhoneNumber()).isEqualTo("010-1234-5678");
     }
 
     @Test

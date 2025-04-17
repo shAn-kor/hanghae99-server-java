@@ -1,5 +1,7 @@
 package kr.hhplus.be.server.domain.concertschedule;
 
+import kr.hhplus.be.server.domain.Venue.Venue;
+import kr.hhplus.be.server.domain.concert.Concert;
 import kr.hhplus.be.server.infrastructure.repository.ConcertScheduleRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -21,9 +23,10 @@ class ConcertScheduleTest {
     @Test
     @DisplayName("concertId가 null이면 예외 발생")
     void createConcertDate_concertId_null() {
+        Venue venue = mock(Venue.class);
         assertThatThrownBy(() -> ConcertSchedule.builder()
-                .concertId(null)
-                .venueId(10L)
+                .concert(null)
+                .venue(venue)
                 .concertDate(LocalDateTime.now().plusDays(1))
                 .build()
         ).isInstanceOf(IllegalArgumentException.class)
@@ -31,35 +34,13 @@ class ConcertScheduleTest {
     }
 
     @Test
-    @DisplayName("concertId가 0이하이면 예외 발생")
-    void createConcertDate_concertId_zeroOrNegative() {
-        assertThatThrownBy(() -> ConcertSchedule.builder()
-                .concertId(0L)
-                .venueId(10L)
-                .concertDate(LocalDateTime.now().plusDays(1))
-                .build()
-        ).isInstanceOf(IllegalArgumentException.class)
-                .hasMessage("concertId must be positive");
-    }
-
-    @Test
-    @DisplayName("venueId가 0이하이면 예외 발생")
-    void createConcertDate_venueId_zeroOrNegative() {
-        assertThatThrownBy(() -> ConcertSchedule.builder()
-                .concertId(1L)
-                .venueId(0L)
-                .concertDate(LocalDateTime.now().plusDays(1))
-                .build()
-        ).isInstanceOf(IllegalArgumentException.class)
-                .hasMessage("venueId must be positive");
-    }
-
-    @Test
     @DisplayName("concertDate가 과거이면 예외 발생")
     void createConcertDate_concertDate_inPast() {
+        Venue venue = mock(Venue.class);
+        Concert concert = mock(Concert.class);
         assertThatThrownBy(() -> ConcertSchedule.builder()
-                .concertId(1L)
-                .venueId(10L)
+                .concert(concert)
+                .venue(venue)
                 .concertDate(LocalDateTime.now().minusMinutes(1))
                 .build()
         ).isInstanceOf(IllegalArgumentException.class)

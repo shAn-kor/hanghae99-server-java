@@ -33,8 +33,8 @@ class SeatControllerUnitTest {
         // given
         SeatRequest request = new SeatRequest(LocalDateTime.now(), UUID.randomUUID());
         List<Seat> emptySeats = List.of(
-                new Seat(1L, 1L, 10, SeatStatus.EMPTY),
-                new Seat(1L, 1L, 20, SeatStatus.EMPTY)
+                new Seat( 1L, 10, SeatStatus.EMPTY),
+                new Seat( 1L, 20, SeatStatus.EMPTY)
         );
         when(seatService.getEmptySeats()).thenReturn(emptySeats);
 

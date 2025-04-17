@@ -13,33 +13,18 @@ class SeatTest {
     @DisplayName("정상적인 값으로 Seat 생성")
     void createSeat_success() {
         Seat seat = Seat.builder()
-                .seatId(1L)
-                .concertDateId(1L)
+                .concertScheduleId(1L)
                 .seatNumber(10)
                 .build();
 
-        assertThat(seat.seatId()).isEqualTo(1L);
-        assertThat(seat.seatNumber()).isEqualTo(10);
-    }
-
-    @Test
-    @DisplayName("seatId가 null이면 예외 발생")
-    void createSeat_seatId_null() {
-        assertThatThrownBy(() -> Seat.builder()
-                .seatId(null)
-                .concertDateId(1L)
-                .seatNumber(10)
-                .build()
-        ).isInstanceOf(IllegalArgumentException.class)
-                .hasMessage("seatId must not be null");
+        assertThat(seat.getSeatNumber()).isEqualTo(10);
     }
 
     @Test
     @DisplayName("seatNumber가 0 이하이면 예외 발생")
     void createSeat_seatNumber_zeroOrNegative() {
         assertThatThrownBy(() -> Seat.builder()
-                .seatId(1L)
-                .concertDateId(1L)
+                .concertScheduleId(1L)
                 .seatNumber(0)
                 .build()
         ).isInstanceOf(IllegalArgumentException.class)
@@ -50,8 +35,7 @@ class SeatTest {
     @DisplayName("seatNumber가 50 초과이면 예외 발생")
     void createSeat_seatNumber_tooHigh() {
         assertThatThrownBy(() -> Seat.builder()
-                .seatId(1L)
-                .concertDateId(1L)
+                .concertScheduleId(1L)
                 .seatNumber(51)
                 .build()
         ).isInstanceOf(IllegalArgumentException.class)
@@ -63,8 +47,7 @@ class SeatTest {
     void chooseSeat_success() {
         // given
         Seat seat = Seat.builder()
-                .seatId(1L)
-                .concertDateId(1L)
+                .concertScheduleId(1L)
                 .seatNumber(5)
                 .build();
 

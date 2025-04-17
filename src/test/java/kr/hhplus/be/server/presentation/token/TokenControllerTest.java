@@ -52,7 +52,7 @@ class TokenControllerTest {
         UUID tokenId = UUID.randomUUID();
         TokenRequest request = new TokenRequest(userId);
 
-        Token mockToken = new Token(tokenId, userId, 5, true, LocalDateTime.now());
+        Token mockToken = new Token( userId, 5, true, LocalDateTime.now());
 
         // ✅ 여기에서 ResponseEntity 말고 Token 자체를 반환해야 함
         when(tokenService.getToken(new TokenCommand(userId))).thenReturn(mockToken);

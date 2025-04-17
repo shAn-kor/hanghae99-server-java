@@ -26,8 +26,8 @@ class SeatServiceTest {
     void getEmptySeats_returnsEmptySeats() {
         // given
         List<Seat> mockSeats = List.of(
-                new Seat(1L, 101L, 10, SeatStatus.EMPTY),
-                new Seat(2L, 101L, 11, SeatStatus.EMPTY)
+                new Seat( 101L, 10, SeatStatus.EMPTY),
+                new Seat( 101L, 11, SeatStatus.EMPTY)
         );
         when(seatRepository.getEmptySeats()).thenReturn(mockSeats);
 
@@ -46,8 +46,8 @@ class SeatServiceTest {
         List<Integer> seatNumbers = List.of(10, 11);
         SeatCommand command = new SeatCommand(1L, seatNumbers);
 
-        when(seatRepository.choose(10)).thenReturn(new Seat(1L, 101L, 10, SeatStatus.RESERVED));
-        when(seatRepository.choose(11)).thenReturn(new Seat(2L, 101L, 11, SeatStatus.RESERVED));
+        when(seatRepository.choose(10)).thenReturn(new Seat( 101L, 10, SeatStatus.RESERVED));
+        when(seatRepository.choose(11)).thenReturn(new Seat( 101L, 11, SeatStatus.RESERVED));
 
         // when
         List<Seat> result = seatService.reserveSeat(command);
@@ -63,11 +63,13 @@ class SeatServiceTest {
     void unReserveSeat_shouldCallRepository() {
         // given
         SeatIdCommand command = new SeatIdCommand(99L);
+        Seat seat = mock(Seat.class);
 
         // when
         seatService.unReserveSeat(command);
 
         // then
-        verify(seatRepository).unReserveSeat(99L);
+        verify(seat).unReserve();
+        verify(seatRepository).save(seat);
     }
 }

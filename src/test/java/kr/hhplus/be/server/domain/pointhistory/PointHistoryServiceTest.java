@@ -5,7 +5,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 import static kr.hhplus.be.server.domain.pointhistory.PointHistoryType.CHARGE;
@@ -30,7 +29,7 @@ class PointHistoryServiceUnitTest {
         Long pointId = 1L;
         PointHistoryCommand command = PointHistoryCommand.builder().pointId(pointId).build();
         List<PointHistory> mockHistory = List.of(
-                new PointHistory(1L, pointId, CHARGE, LocalDateTime.now())
+                new PointHistory( pointId, CHARGE)
         );
 
         when(pointHistoryRepository.getPointHistory(pointId)).thenReturn(mockHistory);
@@ -40,7 +39,7 @@ class PointHistoryServiceUnitTest {
 
         // then
         assertThat(result).hasSize(1);
-        assertThat(result.get(0).pointId()).isEqualTo(pointId);
+        assertThat(result.get(0).getPointId()).isEqualTo(pointId);
     }
 
     @Test

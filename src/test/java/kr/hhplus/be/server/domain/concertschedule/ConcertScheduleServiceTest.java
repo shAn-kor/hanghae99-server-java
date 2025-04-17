@@ -1,5 +1,7 @@
 package kr.hhplus.be.server.domain.concertschedule;
 
+import kr.hhplus.be.server.domain.Venue.Venue;
+import kr.hhplus.be.server.domain.concert.Concert;
 import kr.hhplus.be.server.domain.concert.ConcertCommand;
 import kr.hhplus.be.server.infrastructure.repository.ConcertScheduleRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -28,17 +30,19 @@ class ConcertScheduleServiceTest {
     void getConcertDates_success() {
         // given
         Long concertId = 1L;
+        Concert concert = mock(Concert.class);
+        Venue venue = mock(Venue.class);
         ConcertCommand command = new ConcertCommand(concertId, 1L);
 
         List<ConcertSchedule> mockResult = List.of(
                 ConcertSchedule.builder()
-                        .concertId(concertId)
-                        .venueId(100L)
+                        .concert(concert)
+                        .venue(venue)
                         .concertDate(LocalDateTime.of(2025, 5, 10, 20, 0))
                         .build(),
                 ConcertSchedule.builder()
-                        .concertId(concertId)
-                        .venueId(101L)
+                        .concert(concert)
+                        .venue(venue)
                         .concertDate(LocalDateTime.of(2025, 5, 11, 20, 0))
                         .build()
         );
