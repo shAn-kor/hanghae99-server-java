@@ -24,7 +24,7 @@ public interface ConcertApi {
 
     @Operation(summary = "공연장 목록 조회", description = "특정 공연 ID에 해당하는 공연장 목록을 조회합니다.")
     @GetMapping("/hallList")
-    ResponseEntity<List<VenueResponse>> hallList(@Valid @RequestBody ConcertRequest request);
+    ResponseEntity<VenueResponse> hallList(@Valid @RequestBody ConcertRequest request);
 
     @Operation(summary = "공연 날짜 목록 조회", description = "선택한 공연 + 공연장 조합에 해당하는 날짜 리스트를 조회합니다.")
     @GetMapping("/dateList")

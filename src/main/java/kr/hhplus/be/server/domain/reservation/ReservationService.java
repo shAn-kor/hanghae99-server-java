@@ -1,9 +1,11 @@
 package kr.hhplus.be.server.domain.reservation;
 
+import jakarta.persistence.EntityManager;
 import kr.hhplus.be.server.application.dto.ReservationResult;
 import kr.hhplus.be.server.infrastructure.repository.ReservationRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -12,21 +14,21 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ReservationService {
     private final ReservationRepository reservationRepository;
+    private final EntityManager entityManager;
 
     public void reserve(ReservationCommand command) {
         Reservation reservation = reservationRepository.save(command.toReservation());
+        entityManager.flush(); // ID가 바로 생성되도록 함
 
         List<ReservationItem> list = command.items().stream()
                 .map(rI ->
                         ReservationItem.builder()
-                                .reservationId(reservation.reservationId())
+                                .reservationId(reservation.getReservationId())
                                 .seatId(rI.seatId())
                                 .build())
                 .toList();
 
-        for (ReservationItem reservationItem : list) {
-            reservationRepository.saveItem(reservationItem);
-        }
+        list.forEach(reservationRepository::saveItem);
     }
 
     public List<ReservationItem> getDeadItems(DeadlineItemCriteria deadlineItemCriteria) {
@@ -34,15 +36,17 @@ public class ReservationService {
 
         List<ReservationItem> deadItems = new LinkedList<>();
         for (Reservation reservation : deadReservations) {
-            deadItems.addAll(reservation.items());
+            List<ReservationItem> deadReservationItems = reservationRepository.getItems(reservation.getReservationId());
+            deadItems.addAll(deadReservationItems);
         }
 
         return deadItems;
     }
 
+    @Transactional(readOnly = true)
     public ReservationResult getTotalAmount(ReservationIdCommand reservationIdCommand) {
         Reservation reservation = reservationRepository.getReservation(reservationIdCommand.reservationId());
-        int itemCount = reservation.items().size();
+        int itemCount = reservationRepository.getItems(reservation.getReservationId()).size();
 
         return new ReservationResult(itemCount * 500L);
     }

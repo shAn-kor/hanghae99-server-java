@@ -2,6 +2,7 @@ package kr.hhplus.be.server.application;
 
 import kr.hhplus.be.server.application.dto.PointCriteria;
 import kr.hhplus.be.server.application.dto.PointHistoryResult;
+import kr.hhplus.be.server.application.dto.PointResult;
 import kr.hhplus.be.server.domain.point.Point;
 import kr.hhplus.be.server.domain.point.PointService;
 import kr.hhplus.be.server.domain.pointhistory.PointHistory;
@@ -24,19 +25,19 @@ public class PointFacade {
         Point point = pointService.getPointByUserId(criteria.toPointCommand());
 
         PointHistoryCommand historyCommand = PointHistoryCommand.builder()
-                .pointId(point.pointId())
+                .pointId(point.getPointId())
                 .type(CHECK)
                 .build();
         pointHistoryService.savePointHistory(historyCommand);
 
-        return PointResult.builder().uuid(point.userId()).point(point.balance()).build();
+        return PointResult.builder().uuid(point.getUserId()).point(point.getBalance()).build();
     }
 
     public void chargePoint(PointCriteria criteria) {
         pointService.chargePoint(criteria.toPointCommand());
         Point point = pointService.getPointByUserId(criteria.toPointCommand());
         PointHistoryCommand command = PointHistoryCommand.builder()
-                .pointId(point.pointId())
+                .pointId(point.getPointId())
                 .type(CHARGE)
                 .build();
         pointHistoryService.savePointHistory(command);
@@ -46,7 +47,7 @@ public class PointFacade {
         pointService.usePoint(criteria.toPointCommand());
         Point point = pointService.getPointByUserId(criteria.toPointCommand());
         PointHistoryCommand command = PointHistoryCommand.builder()
-                .pointId(point.pointId())
+                .pointId(point.getPointId())
                 .type(USE)
                 .build();
         pointHistoryService.savePointHistory(command);
@@ -56,13 +57,13 @@ public class PointFacade {
         Point point = pointService.getPointByUserId(pointCriteria.toPointCommand());
         List<PointHistory> historyList = pointHistoryService.getPointHistoryByPointId(
                 PointHistoryCommand.builder()
-                        .pointId(point.pointId()).build()
+                        .pointId(point.getPointId()).build()
         );
         return historyList.stream()
                 .map(ph -> new PointHistoryResult(
-                        ph.pointId(),
-                        ph.type(),
-                        ph.createdAt()
+                        ph.getPointId(),
+                        ph.getType(),
+                        ph.getCreatedAt()
                 )).toList();
     }
 }

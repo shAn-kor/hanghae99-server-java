@@ -17,20 +17,20 @@ public class PointService {
     public void checkPoint (PointCommand command) throws InsufficientBalanceException {
         Point point = getPointByUserId(command);
 
-        if (!point.checkPoint(command.point())) {
+        if (point.checkPoint(command.point())) {
             throw new InsufficientBalanceException("잔액이 부족합니다.");
         }
     }
 
     public void chargePoint(PointCommand command) {
         Point point = getPointByUserId(command);
-        Point newPoint = point.charge(command.point());
-        pointRepository.save(newPoint);
+        point.charge(command.point());
+        pointRepository.save(point);
     }
 
     public void usePoint(PointCommand command) {
         Point point = getPointByUserId(command);
-        Point newPoint = point.use(command.point());
-        pointRepository.save(newPoint);
+        point.use(command.point());
+        pointRepository.save(point);
     }
 }

@@ -27,15 +27,15 @@ public class TokenFacade {
                 UserCommand.builder().phoneNumber(criteria.phoneNumber()).build()
         );
 
-        pointService.checkPoint(PointCommand.builder().userId(userId).build());
+        pointService.checkPoint(PointCommand.builder().point(0L).userId(userId).build());
 
         Token token = tokenService.generateToken(TokenCommand.builder().userId(userId).build());
 
         return TokenResult.builder()
                 .userId(userId)
-                .position(token.position())
-                .valid(token.valid())
-                .createdAt(token.createdAt())
+                .position(token.getPosition())
+                .valid(token.getValid())
+                .createdAt(token.getCreatedAt())
                 .build();
     }
 

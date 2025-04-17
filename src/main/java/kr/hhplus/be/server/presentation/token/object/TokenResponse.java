@@ -16,11 +16,11 @@ public record TokenResponse (
 ) {
     public static TokenResponse from (Token token) {
         return TokenResponse.builder()
-                .tokenId(token.tokenId())
-                .userId(token.userId())
-                .position(token.position())
-                .valid(token.valid())
-                .createdAt(token.createdAt())
+                .tokenId(token.getTokenId())
+                .userId(token.getUserId())
+                .position(token.getPosition())
+                .valid(token.getValid())
+                .createdAt(token.getCreatedAt())
                 .build();
     }
 }

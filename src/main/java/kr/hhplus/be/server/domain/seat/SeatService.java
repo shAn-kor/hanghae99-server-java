@@ -4,6 +4,7 @@ import kr.hhplus.be.server.infrastructure.repository.SeatRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.LinkedList;
 import java.util.List;
 
 @Service
@@ -16,12 +17,20 @@ public class SeatService {
     }
 
     public List<Seat> reserveSeat(SeatCommand command) {
-        return command.seatNumbers().stream()
-                .map(seatRepository::choose)
-                .toList();
+        List<Seat> seats = new LinkedList<>();
+
+        for (Integer seatNumber : command.seatNumbers()) {
+            Seat seat = seatRepository.getSeat(command.concertScheduleId(), seatNumber);
+            seat.reserve();
+            seatRepository.save(seat);
+            seats.add(seat);
+        }
+        return seats;
     }
 
     public void unReserveSeat(SeatIdCommand command) {
-        seatRepository.unReserveSeat(command.seatId());
+        Seat seat = seatRepository.findById(command.seatId());
+        seat.unReserve();
+        seatRepository.save(seat);
     }
 }

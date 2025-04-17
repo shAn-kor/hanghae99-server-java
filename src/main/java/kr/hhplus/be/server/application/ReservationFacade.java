@@ -33,7 +33,7 @@ public class ReservationFacade {
                 .map(seat ->
                         ReservationItemCommand.builder()
                                 .seatId(
-                                        seat.seatId()
+                                        seat.getSeatId()
                                 ).build())
                 .toList();
 
@@ -51,7 +51,7 @@ public class ReservationFacade {
         List<ReservationItem> deadItems = reservationService.getDeadItems(new DeadlineItemCriteria(deadline));
 
         for (ReservationItem item : deadItems) {
-            SeatIdCommand command = new SeatIdCommand(item.seatId());
+            SeatIdCommand command = new SeatIdCommand(item.getSeatId());
             seatService.unReserveSeat(command);
         }
     }

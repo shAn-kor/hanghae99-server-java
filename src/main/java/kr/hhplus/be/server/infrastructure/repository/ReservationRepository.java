@@ -5,6 +5,7 @@ import kr.hhplus.be.server.domain.reservation.ReservationItem;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.UUID;
 
 public interface ReservationRepository {
     Reservation save(Reservation reservation);
@@ -14,4 +15,8 @@ public interface ReservationRepository {
     List<Reservation> getDeadReservations(LocalDateTime deadline);
 
     Reservation getReservation(Long aLong);
+
+    List<Reservation> findByUserId(UUID userId);
+
+    List<ReservationItem> getItems(Long reservationId);
 }

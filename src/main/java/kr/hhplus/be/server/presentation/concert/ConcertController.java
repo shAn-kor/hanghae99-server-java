@@ -34,10 +34,10 @@ public class ConcertController implements ConcertApi {
     }
 
     @PostMapping("/hallList")
-    public ResponseEntity<List<VenueResponse>> hallList(@Valid @RequestBody ConcertRequest request) {
-        List<Venue> venueList = venueService.getConcertVenueList(request.toCommand());
-        List<VenueResponse> responseList = VenueResponse.from(venueList);
-        return new ResponseEntity<>(responseList, HttpStatus.OK);
+    public ResponseEntity<VenueResponse> hallList(@Valid @RequestBody ConcertRequest request) {
+        Venue venue = venueService.getConcertVenue(request.toCommand());
+        VenueResponse response = VenueResponse.from(venue);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @PostMapping("/dateList")

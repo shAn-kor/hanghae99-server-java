@@ -22,7 +22,7 @@ public class SeatController implements SeatApi {
 
     @PostMapping("/emptyseatlist")
     public ResponseEntity<List<Integer>> emptySeatList(@Valid @RequestBody SeatRequest seatRequest) {
-        List<Integer> list = seatService.getEmptySeats().stream().map(Seat::seatNumber).toList();
+        List<Integer> list = seatService.getEmptySeats().stream().map(Seat::getSeatNumber).toList();
 
         return new ResponseEntity<>(list, HttpStatus.OK);
     }

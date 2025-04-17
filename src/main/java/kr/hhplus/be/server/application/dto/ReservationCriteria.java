@@ -10,7 +10,7 @@ import java.util.UUID;
 @Builder
 public record ReservationCriteria(
         UUID uuid,
-        Long concertDateTimeId,
+        Long concertScheduleId,
         List<Integer> seatList
 ) {
     public static ReservationCommand toReservationCommand(ReservationCriteria criteria) {
@@ -18,6 +18,6 @@ public record ReservationCriteria(
     }
 
     public static SeatCommand toSeatCommand(ReservationCriteria criteria) {
-        return SeatCommand.builder().concertDateId(criteria.concertDateTimeId()).seatNumbers(criteria.seatList).build();
+        return SeatCommand.builder().concertScheduleId(criteria.concertScheduleId()).seatNumbers(criteria.seatList).build();
     }
 }
