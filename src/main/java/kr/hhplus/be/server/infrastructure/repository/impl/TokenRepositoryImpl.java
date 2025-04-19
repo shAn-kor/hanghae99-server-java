@@ -25,6 +25,11 @@ public class TokenRepositoryImpl implements TokenRepository {
     }
 
     @Override
+    public List<Token> findValidTokens() {
+        return repository.findValidTokens();
+    }
+
+    @Override
     public Token save(Token token) {
         return repository.save(token);
     }

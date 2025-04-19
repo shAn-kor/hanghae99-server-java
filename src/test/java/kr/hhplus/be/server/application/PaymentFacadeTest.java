@@ -8,6 +8,7 @@ import kr.hhplus.be.server.domain.point.PointCommand;
 import kr.hhplus.be.server.domain.point.PointService;
 import kr.hhplus.be.server.domain.reservation.ReservationIdCommand;
 import kr.hhplus.be.server.domain.reservation.ReservationService;
+import kr.hhplus.be.server.domain.token.TokenService;
 import kr.hhplus.be.server.exception.InsufficientBalanceException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -22,6 +23,7 @@ class PaymentFacadeTest {
     private PaymentService paymentService;
     private ReservationService reservationService;
     private PointService pointService;
+    private TokenService tokenService;
 
     private PaymentFacade paymentFacade;
 
@@ -30,8 +32,9 @@ class PaymentFacadeTest {
         paymentService = mock(PaymentService.class);
         reservationService = mock(ReservationService.class);
         pointService = mock(PointService.class);
+        tokenService = mock(TokenService.class);
 
-        paymentFacade = new PaymentFacade(paymentService, reservationService, pointService);
+        paymentFacade = new PaymentFacade(paymentService, reservationService, pointService, tokenService);
     }
 
     @Test

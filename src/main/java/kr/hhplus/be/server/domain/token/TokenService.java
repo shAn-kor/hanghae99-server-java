@@ -34,12 +34,10 @@ public class TokenService {
 
     @Scheduled(fixedRate = 10000)
     public void updateTokenValidity() {
-        List<Token> tokens = tokenRepository.findAll();
+        List<Token> tokens = tokenRepository.findValidTokens();
         for (Token token : tokens) {
-            if (token.getPosition() <= 50) {
-                token.updateValidTrue();
-                tokenRepository.save(token);
-            }
+            token.updateValidTrue();
+            tokenRepository.save(token);
         }
     }
 
@@ -49,5 +47,11 @@ public class TokenService {
             return false;
         }
         return token.getValid();
+    }
+
+    public void endToken(TokenCommand tokenCommand) {
+        Token token = tokenRepository.getToken(tokenCommand.userId());
+        token.setPositionZero();
+        tokenRepository.save(token);
     }
 }
