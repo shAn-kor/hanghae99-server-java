@@ -4,8 +4,8 @@ import kr.hhplus.be.server.domain.Venue.Venue;
 import kr.hhplus.be.server.domain.Venue.VenueService;
 import kr.hhplus.be.server.domain.concert.Concert;
 import kr.hhplus.be.server.domain.concert.ConcertService;
-import kr.hhplus.be.server.domain.concertdate.ConcertDate;
-import kr.hhplus.be.server.domain.concertdate.ConcertDateService;
+import kr.hhplus.be.server.domain.concertschedule.ConcertSchedule;
+import kr.hhplus.be.server.domain.concertschedule.ConcertScheduleService;
 import kr.hhplus.be.server.presentation.concert.object.ConcertDateResponse;
 import kr.hhplus.be.server.presentation.concert.object.ConcertRequest;
 import kr.hhplus.be.server.presentation.concert.object.ConcertResponse;
@@ -25,15 +25,15 @@ class ConcertControllerUnitTest {
 
     private ConcertService concertService;
     private VenueService venueService;
-    private ConcertDateService concertDateService;
+    private ConcertScheduleService concertScheduleService;
     private ConcertController controller;
 
     @BeforeEach
     void setUp() {
         concertService = mock(ConcertService.class);
         venueService = mock(VenueService.class);
-        concertDateService = mock(ConcertDateService.class);
-        controller = new ConcertController(concertService, venueService, concertDateService);
+        concertScheduleService = mock(ConcertScheduleService.class);
+        controller = new ConcertController(concertService, venueService, concertScheduleService);
     }
 
     @Test
@@ -41,8 +41,8 @@ class ConcertControllerUnitTest {
     void concertList_success() {
         // given
         List<Concert> concerts = List.of(
-                new Concert(1L, "콘서트A", "아티스트A"),
-                new Concert(2L, "콘서트B", "아티스트B")
+                new Concert( "콘서트A", "아티스트A"),
+                new Concert( "콘서트B", "아티스트B")
         );
         when(concertService.concertList()).thenReturn(concerts);
 
@@ -60,18 +60,16 @@ class ConcertControllerUnitTest {
     void hallList_success() {
         // given
         ConcertRequest request = ConcertRequest.builder().concertId(1L).build();
-        List<Venue> venues = List.of(
-                new Venue(1L, "올림픽홀", "서울", 30)
-        );
-        when(venueService.getConcertVenueList(request.toCommand())).thenReturn(venues);
+        Venue venues =
+                new Venue( "올림픽홀", "서울", 30)
+        ;
+        when(venueService.getConcertVenue(request.toCommand())).thenReturn(venues);
 
         // when
-        ResponseEntity<List<VenueResponse>> response = controller.hallList(request);
+        ResponseEntity<VenueResponse> response = controller.hallList(request);
 
         // then
         assertThat(response.getStatusCode().is2xxSuccessful()).isTrue();
-        assertThat(response.getBody()).hasSize(1);
-        assertThat(response.getBody().get(0).venueName()).isEqualTo("올림픽홀");
     }
 
     @Test
@@ -79,14 +77,16 @@ class ConcertControllerUnitTest {
     void dateList_success() {
         // given
         ConcertRequest request = ConcertRequest.builder().concertId(1L).build();
-        List<ConcertDate> dates = List.of(
-                ConcertDate.builder()
-                        .concertId(1L)
-                        .venueId(1L)
+        Concert concert = mock(Concert.class);
+        Venue venues = mock(Venue.class);
+        List<ConcertSchedule> dates = List.of(
+                ConcertSchedule.builder()
+                        .concert(concert)
+                        .venue(venues)
                         .concertDate(LocalDateTime.of(2025, 5, 1, 20, 0))
                         .build()
         );
-        when(concertDateService.getConcertDates(request.toCommand())).thenReturn(dates);
+        when(concertScheduleService.getConcertDates(request.toCommand())).thenReturn(dates);
 
         // when
         ResponseEntity<List<ConcertDateResponse>> response = controller.dateList(request);

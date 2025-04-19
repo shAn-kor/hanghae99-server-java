@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -13,7 +14,18 @@ public class TokenService {
     private final TokenRepository tokenRepository;
 
     public Token generateToken(TokenCommand command) {
-        return tokenRepository.generateToken(command.userId());
+        Integer maxPosition = tokenRepository.getMaxPosition();
+        if (maxPosition == null) {
+            maxPosition = 0;
+        }
+
+        Token token = Token.builder()
+                .userId(command.userId())
+                .position(maxPosition + 1)
+                .valid(false)
+                .createdAt(LocalDateTime.now())
+                .build();
+        return tokenRepository.save(token);
     }
 
     public Token getToken(TokenCommand tokenCommand) {
@@ -24,13 +36,18 @@ public class TokenService {
     public void updateTokenValidity() {
         List<Token> tokens = tokenRepository.findAll();
         for (Token token : tokens) {
-            if (token.position() <= 50) {
-                tokenRepository.updateValid(token.tokenId(), true);
+            if (token.getPosition() <= 50) {
+                token.updateValidTrue();
+                tokenRepository.save(token);
             }
         }
     }
 
     public boolean isValid(TokenCommand command) {
-        return tokenRepository.checkValid(command.userId());
+        Token token = tokenRepository.getToken(command.userId());
+        if (token == null) {
+            return false;
+        }
+        return token.getValid();
     }
 }

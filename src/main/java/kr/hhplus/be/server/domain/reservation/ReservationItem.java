@@ -1,24 +1,32 @@
 package kr.hhplus.be.server.domain.reservation;
 
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.IdClass;
 import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-@Builder
-public record ReservationItem(
-        Long reservationId,
-        Long seatId
-) {
-    public ReservationItem {
-        if (seatId == null) {
-            throw new IllegalArgumentException("seatId must not be null");
-        }
-        if (reservationId == null) {
-            throw new IllegalArgumentException("reservationId must not be null");
-        }
-        if (seatId <= 0) {
-            throw new IllegalArgumentException("seatId must be greater than zero");
-        }
-        if (reservationId <= 0) {
-            throw new IllegalArgumentException("reservationId must be greater than zero");
-        }
+@IdClass(ReservationItemPK.class)
+@Entity(name = "reservation_item")
+@NoArgsConstructor
+@Setter
+@Getter
+public class ReservationItem {
+
+    @Id
+    @Column(name = "reservation_id")
+    private Long reservationId;
+
+    @Id
+    @Column(name = "seat_id")
+    private Long seatId;
+
+    @Builder
+    public ReservationItem(Long reservationId, Long seatId) {
+        this.reservationId = reservationId;
+        this.seatId = seatId;
     }
 }

@@ -26,7 +26,7 @@ class PointServiceTest {
     void getPointByUserId_success() {
         UUID userId = UUID.randomUUID();
         PointCommand command = new PointCommand(userId, 100L);
-        Point mockPoint = new Point(1L, userId, 1000L);
+        Point mockPoint = new Point( userId, 1000L);
 
         when(pointRepository.getPoint(userId)).thenReturn(mockPoint);
 
@@ -46,9 +46,8 @@ class PointServiceTest {
         when(pointRepository.getPoint(userId)).thenReturn(mockPoint);
         when(mockPoint.checkPoint(command.point())).thenReturn(true);
 
-        Boolean result = pointService.checkPoint(command);
+        pointService.checkPoint(command);
 
-        assertThat(result).isTrue();
         verify(mockPoint).checkPoint(0L);
     }
 
@@ -63,7 +62,7 @@ class PointServiceTest {
 
         pointService.chargePoint(command);
 
-        verify(pointRepository).charge(userId, 500L);
+        verify(mockPoint).charge(500L);
     }
 
     @Test
@@ -77,6 +76,6 @@ class PointServiceTest {
 
         pointService.usePoint(command);
 
-        verify(pointRepository).use(userId, 500L);
+        verify(mockPoint).use(300L);
     }
 }

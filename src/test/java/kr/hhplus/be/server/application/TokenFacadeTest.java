@@ -2,7 +2,6 @@ package kr.hhplus.be.server.application;
 
 import kr.hhplus.be.server.application.dto.TokenResult;
 import kr.hhplus.be.server.application.dto.UserCriteria;
-import kr.hhplus.be.server.domain.point.PointCommand;
 import kr.hhplus.be.server.domain.point.PointService;
 import kr.hhplus.be.server.domain.token.Token;
 import kr.hhplus.be.server.domain.token.TokenCommand;
@@ -45,10 +44,9 @@ class TokenFacadeTest {
 
         UUID userId = UUID.randomUUID();
         UUID tokenId = UUID.randomUUID();
-        Token token = new Token(tokenId, userId, 5, true, LocalDateTime.now());
+        Token token = new Token( userId, 5, true, LocalDateTime.now());
 
         when(userService.getUserId(any(UserCommand.class))).thenReturn(userId);
-        when(pointService.checkPoint(any(PointCommand.class))).thenReturn(true);
         when(tokenService.generateToken(any(TokenCommand.class))).thenReturn(token);
 
         // when
@@ -57,7 +55,7 @@ class TokenFacadeTest {
         // then
         assertThat(result).isNotNull();
         assertThat(result.userId()).isEqualTo(userId);
-        assertThat(result.position()).isEqualTo(token.position());
+        assertThat(result.position()).isEqualTo(token.getPosition());
         assertThat(result.valid()).isTrue();
 
         verify(userService, times(1)).getUserId(any());
@@ -75,7 +73,6 @@ class TokenFacadeTest {
         UUID userId = UUID.randomUUID();
 
         when(userService.getUserId(any())).thenReturn(userId);
-        when(pointService.checkPoint(any())).thenReturn(false);
 
         // when & then
         assertThatThrownBy(() -> tokenFacade.createToken(criteria))

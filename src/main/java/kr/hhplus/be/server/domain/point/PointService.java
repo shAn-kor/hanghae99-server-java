@@ -1,5 +1,6 @@
 package kr.hhplus.be.server.domain.point;
 
+import kr.hhplus.be.server.exception.InsufficientBalanceException;
 import kr.hhplus.be.server.infrastructure.repository.PointRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -13,16 +14,23 @@ public class PointService {
         return pointRepository.getPoint(command.userId());
     }
 
-    public Boolean checkPoint (PointCommand command) {
+    public void checkPoint (PointCommand command) throws InsufficientBalanceException {
         Point point = getPointByUserId(command);
-        return point.checkPoint(command.point());
+
+        if (point.checkPoint(command.point())) {
+            throw new InsufficientBalanceException("잔액이 부족합니다.");
+        }
     }
 
     public void chargePoint(PointCommand command) {
-        pointRepository.charge(command.userId(), command.point());
+        Point point = getPointByUserId(command);
+        point.charge(command.point());
+        pointRepository.save(point);
     }
 
     public void usePoint(PointCommand command) {
-        pointRepository.use(command.userId(), command.point());
+        Point point = getPointByUserId(command);
+        point.use(command.point());
+        pointRepository.save(point);
     }
 }

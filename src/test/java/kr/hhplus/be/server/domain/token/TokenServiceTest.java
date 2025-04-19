@@ -51,7 +51,7 @@ class TokenControllerTest {
         UUID tokenId = UUID.randomUUID();
         TokenRequest request = new TokenRequest(userId);
 
-        Token mockToken = new Token(tokenId, userId, 5, true, LocalDateTime.now());
+        Token mockToken = new Token( userId, 5, true, LocalDateTime.now());
         TokenResponse mockResponse = TokenResponse.from(mockToken);
 
         when(tokenService.getToken(new TokenCommand(userId))).thenReturn(mockToken);

@@ -11,7 +11,7 @@ public record ConcertResponse(
         String artist
 ) {
     public static ConcertResponse from (Concert concert) {
-        return ConcertResponse.builder().concertName(concert.concertName()).artist(concert.artist()).build();
+        return ConcertResponse.builder().concertName(concert.getConcertName()).artist(concert.getArtist()).build();
     }
 
     public static List<ConcertResponse> fromConcertList (List<Concert> list) {

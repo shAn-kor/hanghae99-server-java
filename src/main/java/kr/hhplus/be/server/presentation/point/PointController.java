@@ -2,7 +2,7 @@ package kr.hhplus.be.server.presentation.point;
 
 import jakarta.validation.Valid;
 import kr.hhplus.be.server.application.PointFacade;
-import kr.hhplus.be.server.application.PointResult;
+import kr.hhplus.be.server.application.dto.PointResult;
 import kr.hhplus.be.server.application.dto.PointCriteria;
 import kr.hhplus.be.server.presentation.point.object.PointHistoryResponse;
 import kr.hhplus.be.server.presentation.point.object.PointRequest;

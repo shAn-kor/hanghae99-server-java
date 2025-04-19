@@ -12,6 +12,7 @@ public class UserService {
     private final UserRepository userRepository;
 
     public UUID getUserId(UserCommand command) {
-        return userRepository.getUuidByPhone(command.phoneNumber());
+        User user = userRepository.getUser(command.phoneNumber());
+        return user.getUserId();
     }
 }

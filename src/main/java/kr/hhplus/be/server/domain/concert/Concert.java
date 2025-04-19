@@ -1,19 +1,30 @@
 package kr.hhplus.be.server.domain.concert;
 
+import jakarta.persistence.*;
+import lombok.AccessLevel;
 import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
-@Builder
-public record Concert(
-        Long concertId,
-        String concertName,
-        String artist
-) {
-    public Concert {
-        if (concertId == null) {
-            throw new IllegalArgumentException("concertId must not be null");
-        }
-        if (concertId <= 0) {
-            throw new IllegalArgumentException("concertId must be positive");
-        }
+@Getter
+@Entity(name = "concert")
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+public class Concert {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "concert_id")
+    private Long concertId;
+
+    @Column(name = "concert_name", columnDefinition = "varchar(50)")
+    private String concertName;
+
+    @Column(name = "artist", columnDefinition = "varchar(50)")
+    private String artist;
+
+    @Builder
+    public Concert(String concertName, String artist) {
+        this.concertName = concertName;
+        this.artist = artist;
     }
 }

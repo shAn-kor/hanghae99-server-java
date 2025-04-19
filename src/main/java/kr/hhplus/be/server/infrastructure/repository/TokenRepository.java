@@ -6,13 +6,11 @@ import java.util.List;
 import java.util.UUID;
 
 public interface TokenRepository {
-    Token generateToken(UUID userId);
-
     Token getToken(UUID uuid);
 
     List<Token> findAll();
 
-    void updateValid(UUID uuid, boolean b);
+    Token save(Token token);
 
-    boolean checkValid(UUID uuid);
+    Integer getMaxPosition();
 }

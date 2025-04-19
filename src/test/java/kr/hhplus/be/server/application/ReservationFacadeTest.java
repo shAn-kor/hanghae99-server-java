@@ -43,8 +43,8 @@ class ReservationFacadeUnitTest {
         ReservationCriteria criteria = new ReservationCriteria(userId, 1L, seatNumbers);
 
         List<Seat> mockSeats = List.of(
-                new Seat(1L, 100L, 10, SeatStatus.EMPTY),
-                new Seat(2L, 100L, 11, SeatStatus.EMPTY)
+                new Seat( 100L, 10, SeatStatus.EMPTY),
+                new Seat( 100L, 11, SeatStatus.EMPTY)
         );
 
         when(tokenService.isValid(any())).thenReturn(true); // ✅ 대기열 통과 처리
@@ -69,8 +69,8 @@ class ReservationFacadeUnitTest {
     void cancelReservation_shouldUnreserveSeats() {
         // given
         List<ReservationItem> deadItems = List.of(
-                new ReservationItem(999L, 1L),
-                new ReservationItem(999L, 2L)
+                new ReservationItem(1L, 1L),
+                new ReservationItem(1L, 2L)
         );
 
         when(reservationService.getDeadItems(any())).thenReturn(deadItems);

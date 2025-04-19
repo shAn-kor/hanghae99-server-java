@@ -11,7 +11,7 @@ public record VenueResponse(
         String address
 ) {
     public static VenueResponse from(Venue venue) {
-        return VenueResponse.builder().venueName(venue.venueName()).address(venue.address()).build();
+        return VenueResponse.builder().venueName(venue.getVenueName()).address(venue.getAddress()).build();
     }
 
     public static List<VenueResponse> from(List<Venue> venues) {

@@ -2,6 +2,7 @@ package kr.hhplus.be.server.application;
 
 import kr.hhplus.be.server.application.dto.PointCriteria;
 import kr.hhplus.be.server.application.dto.PointHistoryResult;
+import kr.hhplus.be.server.application.dto.PointResult;
 import kr.hhplus.be.server.domain.point.Point;
 import kr.hhplus.be.server.domain.point.PointCommand;
 import kr.hhplus.be.server.domain.point.PointService;
@@ -11,7 +12,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -37,7 +37,7 @@ class PointFacadeUnitTest {
     void getPoint_success() {
         UUID userId = UUID.randomUUID();
         Long pointId = 1L;
-        Point point = new Point(pointId, userId, 1000L);
+        Point point = new Point( userId, 1000L);
         PointCriteria criteria = new PointCriteria(userId, 1000L);
 
         when(pointService.getPointByUserId(any(PointCommand.class))).thenReturn(point);
@@ -56,7 +56,7 @@ class PointFacadeUnitTest {
     void chargePoint_success() {
         UUID userId = UUID.randomUUID();
         Long pointId = 1L;
-        Point point = new Point(pointId, userId, 5000L);
+        Point point = new Point( userId, 5000L);
         PointCriteria criteria = new PointCriteria(userId, 1000L);
 
         when(pointService.getPointByUserId(any(PointCommand.class))).thenReturn(point);
@@ -74,7 +74,7 @@ class PointFacadeUnitTest {
     void usePoint_success() {
         UUID userId = UUID.randomUUID();
         Long pointId = 1L;
-        Point point = new Point(pointId, userId, 3000L);
+        Point point = new Point( userId, 3000L);
         PointCriteria criteria = new PointCriteria(userId, 1000L);
 
         when(pointService.getPointByUserId(any(PointCommand.class))).thenReturn(point);
@@ -93,8 +93,8 @@ class PointFacadeUnitTest {
         UUID userId = UUID.randomUUID();
         Long pointId = 1L;
         PointCriteria criteria = new PointCriteria(userId, 1000L);
-        Point point = new Point(pointId, userId, 1000L);
-        PointHistory history = new PointHistory(1L, pointId, USE, LocalDateTime.now());
+        Point point = new Point( userId, 1000L);
+        PointHistory history = new PointHistory( pointId, USE);
 
         when(pointService.getPointByUserId(any())).thenReturn(point);
         when(pointHistoryService.getPointHistoryByPointId(any()))

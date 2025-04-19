@@ -10,7 +10,9 @@ services:
       - MYSQL_PASSWORD=application
       - MYSQL_DATABASE=hhplus
     volumes:
-      - ./data/mysql/:/var/lib/mysql
+      - ./data/mysql/init.sql:/docker-entrypoint-initdb.d/01_schema.sql
+      - ./data/mysql/data_init.sql:/docker-entrypoint-initdb.d/02_data.sql
+#      - ./data/mysql/:/var/lib/mysql
 
 networks:
   default:

@@ -47,7 +47,6 @@ class PaymentFacadeTest {
 
         when(reservationService.getTotalAmount(new ReservationIdCommand(reservationId)))
                 .thenReturn(mockResult);
-        when(pointService.checkPoint(new PointCommand(userId, totalAmount))).thenReturn(true);
 
         // when
         paymentFacade.paySeat(criteria);
@@ -71,7 +70,6 @@ class PaymentFacadeTest {
 
         when(reservationService.getTotalAmount(new ReservationIdCommand(reservationId)))
                 .thenReturn(mockResult);
-        when(pointService.checkPoint(new PointCommand(userId, totalAmount))).thenReturn(false);
 
         // when & then
         org.assertj.core.api.Assertions.assertThatThrownBy(() -> paymentFacade.paySeat(criteria))
