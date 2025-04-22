@@ -5,6 +5,7 @@ import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 
 @Getter
@@ -31,6 +32,9 @@ public class Reservation {
     @CreatedDate
     @Column(name = "created_at", columnDefinition = "timestamp", updatable = false)
     private LocalDateTime createdAt;
+
+    @OneToMany
+    private List<ReservationItem> reservationItems;
 
     @Builder
     public Reservation(UUID userId, ReservationStatus status) {

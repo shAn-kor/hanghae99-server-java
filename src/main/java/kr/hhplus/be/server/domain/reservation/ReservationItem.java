@@ -16,17 +16,16 @@ import lombok.Setter;
 @Getter
 public class ReservationItem {
 
-    @Id
-    @Column(name = "reservation_id")
-    private Long reservationId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Reservation reservation;
 
     @Id
     @Column(name = "seat_id")
     private Long seatId;
 
     @Builder
-    public ReservationItem(Long reservationId, Long seatId) {
-        this.reservationId = reservationId;
+    public ReservationItem(Reservation reservation, Long seatId) {
+        this.reservation = reservation;
         this.seatId = seatId;
     }
 }

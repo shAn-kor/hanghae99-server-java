@@ -22,12 +22,13 @@ public class ReservationService {
         List<ReservationItem> list = command.items().stream()
                 .map(rI ->
                         ReservationItem.builder()
-                                .reservationId(reservation.getReservationId())
+                                .reservation(reservation)
                                 .seatId(rI.seatId())
                                 .build())
                 .toList();
 
-        list.forEach(reservationRepository::saveItem);
+        reservation.setReservationItems(list);
+        reservationRepository.save(reservation);
     }
 
     public List<ReservationItem> getDeadItems(DeadlineItemCriteria deadlineItemCriteria) {
@@ -37,7 +38,7 @@ public class ReservationService {
     @Transactional(readOnly = true)
     public ReservationResult getTotalAmount(ReservationIdCommand reservationIdCommand) {
         Reservation reservation = reservationRepository.getReservation(reservationIdCommand.reservationId());
-        int itemCount = reservationRepository.getItems(reservation.getReservationId()).size();
+        int itemCount = reservation.getReservationItems().size();
 
         return new ReservationResult(itemCount * 500L);
     }
