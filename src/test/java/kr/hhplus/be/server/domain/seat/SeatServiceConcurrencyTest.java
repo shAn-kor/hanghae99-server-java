@@ -26,16 +26,15 @@ class SeatServiceConcurrencyTest {
     @Autowired
     private SeatRepository seatRepository;
 
-    private static final Long CONCERT_SCHEDULE_ID = 1L;
+    private static final Long VENUE_ID = 1L;
     private static final Integer SEAT_NUMBER = 1;
 
     @BeforeEach
     void setUp() {
         // 테스트 좌석 초기화
         Seat seat = Seat.builder()
-                .concertScheduleId(CONCERT_SCHEDULE_ID)
+                .venueId(VENUE_ID)
                 .seatNumber(SEAT_NUMBER)
-                .status(SeatStatus.EMPTY)
                 .build();
 
         seatRepository.save(seat);
@@ -53,8 +52,8 @@ class SeatServiceConcurrencyTest {
             results.add(executorService.submit(() -> {
                 try {
                     SeatCommand command = SeatCommand.builder()
-                            .concertScheduleId(CONCERT_SCHEDULE_ID)
-                            .seatNumbers(List.of(SEAT_NUMBER))
+                            .venueId(VENUE_ID)
+                            .seatNumbers(List.of(1L))
                             .build();
 
                     seatService.reserveSeat(command);

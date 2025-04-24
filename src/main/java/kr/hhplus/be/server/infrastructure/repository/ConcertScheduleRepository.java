@@ -6,4 +6,6 @@ import java.util.List;
 
 public interface ConcertScheduleRepository {
     List<ConcertSchedule> getConcertDates(Long concertId);
+
+    ConcertSchedule getConcertSchedule(Long aLong);
 }

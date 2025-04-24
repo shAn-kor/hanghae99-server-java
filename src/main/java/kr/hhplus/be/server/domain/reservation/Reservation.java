@@ -25,6 +25,9 @@ public class Reservation {
     @Column(name = "user_id", nullable = false, updatable = false, columnDefinition = "uuid")
     private UUID userId;
 
+    @Column(name = "concert_schedule_id", nullable = false, updatable = false, columnDefinition = "bigint")
+    private Long concertScheduleId;
+
     @Enumerated(EnumType.STRING)
     @Column(name = "status", columnDefinition = "varchar(10)")
     private ReservationStatus status;
@@ -37,11 +40,16 @@ public class Reservation {
     private List<ReservationItem> reservationItems;
 
     @Builder
-    public Reservation(UUID userId, ReservationStatus status) {
+    public Reservation(UUID userId, ReservationStatus status, Long concertScheduleId) {
         if (userId == null) {
             throw new IllegalArgumentException("userId is null");
         }
+        if (concertScheduleId == null) {
+            throw new IllegalArgumentException("concertScheduleId is null");
+        }
+
         this.userId = userId;
+        this.concertScheduleId = concertScheduleId;
         this.status = status;
         this.createdAt = LocalDateTime.now();
     }

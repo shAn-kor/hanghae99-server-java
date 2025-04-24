@@ -11,6 +11,9 @@ public interface JpaReservationItemRepository extends JpaRepository<ReservationI
 
     List<ReservationItem> findByReservationId(Long reservationId);
 
-    @Query("SELECT ri FROM reservation_item ri JOIN reservation r ON ri.reservationId = r.reservationId WHERE r.createdAt <= :deadline AND r.status = 'WAITING'")
+    @Query("SELECT ri FROM reservation_item ri JOIN ri.reservation r WHERE r.createdAt <= :deadline AND r.status = 'WAITING'")
     List<ReservationItem> getDeadItems(LocalDateTime deadline);
+
+    @Query("select ri from reservation_item ri join ri.reservation r where r.concertScheduleId = :concertScheduleId")
+    List<ReservationItem> getReservedItems(Long concertScheduleId);
 }

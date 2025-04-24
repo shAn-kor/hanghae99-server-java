@@ -45,49 +45,24 @@ class SeatServiceIntegrationTest {
         // 테스트를 위한 기본 좌석 1~5번 추가
         for (int i = 1; i <= 5; i++) {
             Seat seat = Seat.builder()
-                    .concertScheduleId(1L)
+                    .venueId(1L)
                     .seatNumber(i)
-                    .status(SeatStatus.EMPTY)
                     .build();
             seatRepository.save(seat);
         }
     }
 
-    @Test
-    void getEmptySeats_빈좌석조회() {
-        // when
-        List<Seat> emptySeats = seatService.getEmptySeats();
 
-        // then
-        assertThat(emptySeats).hasSize(5);
-        assertThat(emptySeats).allMatch(seat -> seat.getStatus().equals(SeatStatus.EMPTY));
-    }
 
     @Test
     void reserveSeat_좌석예약() {
         // given
-        SeatCommand command = SeatCommand.builder().concertScheduleId(1L).seatNumbers(List.of(1, 2)).build();
+        SeatCommand command = SeatCommand.builder().venueId(1L).seatNumbers(List.of(1L, 2L)).build();
 
         // when
         List<Seat> reservedSeats = seatService.reserveSeat(command);
 
         // then
         assertThat(reservedSeats).hasSize(2);
-        assertThat(reservedSeats).allMatch(seat -> seat.getStatus().equals(SeatStatus.RESERVED));
-    }
-
-    @Test
-    void unReserveSeat_좌석예약취소() {
-        // given
-        SeatCommand command = new SeatCommand(1L, List.of(1));
-        List<Seat> reserved = seatService.reserveSeat(command);
-        Long reservedSeatId = reserved.get(0).getSeatId();
-
-        // when
-        seatService.unReserveSeat(new SeatIdCommand(reservedSeatId));
-
-        // then
-        Seat unreserved = seatRepository.findById(reservedSeatId);
-        assertThat(unreserved.getStatus()).isEqualTo(SeatStatus.EMPTY);
     }
 }

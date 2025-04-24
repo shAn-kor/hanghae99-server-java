@@ -1,7 +1,6 @@
 package kr.hhplus.be.server.infrastructure.repository.impl;
 
 import kr.hhplus.be.server.domain.seat.Seat;
-import kr.hhplus.be.server.domain.seat.SeatStatus;
 import kr.hhplus.be.server.infrastructure.jpa.JpaSeatRepository;
 import kr.hhplus.be.server.infrastructure.repository.SeatRepository;
 import lombok.RequiredArgsConstructor;
@@ -25,8 +24,8 @@ public class SeatRepositoryImpl implements SeatRepository {
     }
 
     @Override
-    public List<Seat> getEmptySeats() {
-        return seatRepository.findByStatus(SeatStatus.EMPTY);
+    public List<Seat> getEmptySeats(Long venueId, List<Long> reservedSeatIds) {
+        return seatRepository.getUnreservedSeats(venueId, reservedSeatIds);
     }
 
     @Override

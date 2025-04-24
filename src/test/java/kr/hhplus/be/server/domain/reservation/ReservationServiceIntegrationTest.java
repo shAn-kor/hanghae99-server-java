@@ -60,6 +60,7 @@ class ReservationServiceIntegrationTest {
 
         ReservationCommand command = new ReservationCommand(
                 userId,
+                1L,
                 ReservationStatus.WAITING,
                 LocalDateTime.now(),
                 itemCommands

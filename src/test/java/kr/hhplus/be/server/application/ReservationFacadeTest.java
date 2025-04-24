@@ -1,6 +1,7 @@
 package kr.hhplus.be.server.application;
 
 import kr.hhplus.be.server.application.dto.ReservationCriteria;
+import kr.hhplus.be.server.domain.concertschedule.ConcertScheduleService;
 import kr.hhplus.be.server.domain.reservation.ReservationItem;
 import kr.hhplus.be.server.domain.reservation.ReservationService;
 import kr.hhplus.be.server.domain.reservation.ReservationStatus;
@@ -20,7 +21,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 class ReservationFacadeUnitTest {
-
+    private ConcertScheduleService concertScheduleService;
     private ReservationService reservationService;
     private SeatService seatService;
     private ReservationFacade reservationFacade;
@@ -28,10 +29,11 @@ class ReservationFacadeUnitTest {
 
     @BeforeEach
     void setUp() {
+        concertScheduleService = mock(ConcertScheduleService.class);
         reservationService = mock(ReservationService.class);
         seatService = mock(SeatService.class);
         tokenService = mock(TokenService.class);
-        reservationFacade = new ReservationFacade(reservationService, seatService, tokenService);
+        reservationFacade = new ReservationFacade(concertScheduleService, reservationService, seatService, tokenService);
     }
 
     @Test
@@ -43,11 +45,10 @@ class ReservationFacadeUnitTest {
         ReservationCriteria criteria = new ReservationCriteria(userId, 1L, seatNumbers);
 
         List<Seat> mockSeats = List.of(
-                new Seat( 100L, 10, SeatStatus.EMPTY),
-                new Seat( 100L, 11, SeatStatus.EMPTY)
+                new Seat( 100L, 10),
+                new Seat( 100L, 11)
         );
 
-        when(tokenService.isValid(any())).thenReturn(true); // ✅ 대기열 통과 처리
         when(seatService.reserveSeat(any())).thenReturn(mockSeats);
 
         // when

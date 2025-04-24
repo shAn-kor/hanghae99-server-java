@@ -9,7 +9,7 @@ public interface SeatRepository {
 
     Seat choose(Integer seatNumber);
 
-    List<Seat> getEmptySeats();
+    List<Seat> getEmptySeats(Long venueId, List<Long> longs);
 
     void save(Seat newSeat);
 

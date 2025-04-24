@@ -1,4 +1,4 @@
-package kr.hhplus.be.server.presentation.reservation.object;
+package kr.hhplus.be.server.presentation.reservation;
 
 import jakarta.validation.constraints.NotNull;
 import kr.hhplus.be.server.application.dto.ReservationCriteria;

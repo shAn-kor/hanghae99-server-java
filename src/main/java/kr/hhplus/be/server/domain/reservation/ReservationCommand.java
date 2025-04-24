@@ -9,6 +9,7 @@ import java.util.UUID;
 @Builder
 public record ReservationCommand(
         UUID userId,
+        Long concertScheduleId,
         ReservationStatus status,
         LocalDateTime createdAt,
         List<ReservationItemCommand> items
@@ -16,6 +17,7 @@ public record ReservationCommand(
     public Reservation toReservation() {
         return Reservation.builder()
                 .userId(userId)
+                .concertScheduleId(concertScheduleId)
                 .status(ReservationStatus.WAITING)
                 .build();
     }
