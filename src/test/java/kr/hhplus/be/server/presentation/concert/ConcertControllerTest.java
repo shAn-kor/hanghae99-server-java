@@ -81,8 +81,8 @@ class ConcertControllerUnitTest {
         Venue venues = mock(Venue.class);
         List<ConcertSchedule> dates = List.of(
                 ConcertSchedule.builder()
-                        .concert(concert)
-                        .venue(venues)
+                        .concertId(1L)
+                        .venueId(2L)
                         .concertDate(LocalDateTime.of(2025, 5, 1, 20, 0))
                         .build()
         );

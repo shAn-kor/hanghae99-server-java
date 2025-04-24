@@ -11,9 +11,18 @@ import java.util.UUID;
 @Getter
 @Setter
 @Entity(name = "reservation")
-@Table(name = "reservation", indexes = {
+@Table(
+        name = "reservation",
+        indexes = {
         @Index(name = "idx_reservation_deadline_status", columnList = "status, created_at")
-})
+        },
+        uniqueConstraints = {
+                @UniqueConstraint(
+                        name = "uq_user_schedule",
+                        columnNames = {"user_id", "concert_schedule_id"}
+                )
+        }
+)
 @ToString
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Reservation {
@@ -36,7 +45,7 @@ public class Reservation {
     @Column(name = "created_at", columnDefinition = "timestamp", updatable = false)
     private LocalDateTime createdAt;
 
-    @OneToMany
+    @OneToMany(mappedBy = "reservation", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ReservationItem> reservationItems;
 
     @Builder

@@ -24,5 +24,5 @@ public interface ReservationRepository {
 
     List<ReservationItem> getReservedItems(Long concertScheduleId);
 
-    Reservation findByUserIdAndConcertScheduleId(UUID uuid, Long concertScheduleId);
+    List<Reservation> findByUserIdAndConcertScheduleId(UUID uuid, Long concertScheduleId);
 }

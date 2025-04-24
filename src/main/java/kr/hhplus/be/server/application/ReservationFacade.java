@@ -11,6 +11,7 @@ import kr.hhplus.be.server.domain.token.TokenCommand;
 import kr.hhplus.be.server.domain.token.TokenService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.nio.file.AccessDeniedException;
 import java.util.List;
@@ -23,6 +24,7 @@ public class ReservationFacade {
     private final SeatService seatService;
     private final TokenService tokenService;
 
+    @Transactional
     public void reserveSeats(ReservationCriteria criteria) throws AccessDeniedException {
         tokenService.isValid(TokenCommand.builder().userId(criteria.uuid()).build());
 
@@ -38,6 +40,7 @@ public class ReservationFacade {
 
         ReservationCommand command = ReservationCommand.builder()
                         .userId(criteria.uuid())
+                .concertScheduleId(criteria.concertScheduleId())
                                 .status(ReservationStatus.WAITING)
                                         .items(reservationItems)
                 .build();
@@ -47,7 +50,7 @@ public class ReservationFacade {
     public ReservationItemResult getEmptySeat(ReservationCriteria criteria) {
         ReservationCommand command = ReservationCriteria.toReservationCommand(criteria);
         List<ReservationItem> getReservedItems = reservationService.getReservedItems(command);
-        List<Long> reservedSeatIdList = getReservedItems.stream().map(ReservationItem::getSeatId).toList();
+        List<Long> reservedSeatIdList = getReservedItems.stream().map(reservationItem -> reservationItem.getId().getSeatId()).toList();
         ConcertSchedule schedule = concertScheduleService.getConcertSchedule(criteria.toConcertScheduleCommand());
         SeatCommand seatCommand = SeatCommand.builder().venueId(schedule.getVenueId()).seatNumbers(reservedSeatIdList).build();
         List<Seat> getEmptySeats = seatService.getEmptySeats(seatCommand);

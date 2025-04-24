@@ -46,7 +46,7 @@ public class ReservationRepositoryImpl implements ReservationRepository {
 
     @Override
     public List<ReservationItem> getItems(Long reservationId) {
-        return jpaReservationItemRepository.findByReservationId(reservationId);
+        return jpaReservationItemRepository.findByReservation_ReservationId(reservationId);
     }
 
     @Override
@@ -60,7 +60,7 @@ public class ReservationRepositoryImpl implements ReservationRepository {
     }
 
     @Override
-    public Reservation findByUserIdAndConcertScheduleId(UUID uuid, Long concertScheduleId) {
+    public List<Reservation> findByUserIdAndConcertScheduleId(UUID uuid, Long concertScheduleId) {
         return jpaReservationRepository.findByUserIdAndConcertScheduleId(uuid, concertScheduleId);
     }
 }

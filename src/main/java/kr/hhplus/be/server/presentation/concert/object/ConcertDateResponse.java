@@ -14,8 +14,7 @@ public record ConcertDateResponse(
 ) {
     public static ConcertDateResponse from (ConcertSchedule concertSchedule) {
         return ConcertDateResponse.builder()
-                .concertId(concertSchedule.getConcert().getConcertId())
-                .venueId(concertSchedule.getVenue().getVenueId())
+                .concertId(concertSchedule.getConcertId())
                 .concertDate(concertSchedule.getConcertDate())
                 .build();
     }

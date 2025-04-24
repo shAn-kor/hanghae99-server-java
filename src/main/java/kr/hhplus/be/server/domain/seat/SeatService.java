@@ -16,6 +16,6 @@ public class SeatService {
     }
 
     public List<Seat> reserveSeat(SeatCommand command) {
-        return seatRepository.getEmptySeats(command.venueId(), command.seatNumbers());
+        return seatRepository.findWithPessimisticLock(command.venueId(), command.seatNumbers());
     }
 }

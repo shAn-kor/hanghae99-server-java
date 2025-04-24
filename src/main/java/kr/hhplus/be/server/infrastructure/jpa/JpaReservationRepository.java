@@ -13,5 +13,5 @@ public interface JpaReservationRepository extends JpaRepository<Reservation, Lon
 
     List<Reservation> findByUserId(UUID userId);
 
-    Reservation findByUserIdAndConcertScheduleId(UUID uuid, Long concertScheduleId);
+    List<Reservation> findByUserIdAndConcertScheduleId(UUID uuid, Long concertScheduleId);
 }

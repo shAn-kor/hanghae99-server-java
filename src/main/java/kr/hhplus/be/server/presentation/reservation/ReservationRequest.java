@@ -9,7 +9,7 @@ import java.util.UUID;
 public record ReservationRequest(
         @NotNull UUID uuid,
         @NotNull Long concertDateTimeId,
-        @NotNull List<Integer> seatList
+        @NotNull List<Long> seatList
         ) {
         public static ReservationCriteria toCriteria(@NotNull ReservationRequest request) {
                 return ReservationCriteria.builder().uuid(request.uuid).seatList(request.seatList).build();

@@ -3,18 +3,22 @@ package kr.hhplus.be.server.domain.reservation;
 import kr.hhplus.be.server.application.dto.ReservationResult;
 import kr.hhplus.be.server.infrastructure.repository.ReservationRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class ReservationService {
     private final ReservationRepository reservationRepository;
 
+    @Transactional
     public void reserve(ReservationCommand command) {
         Reservation reservation = reservationRepository.save(command.toReservation());
 
@@ -24,14 +28,15 @@ public class ReservationService {
                                 .reservation(reservation)
                                 .seatId(rI.seatId())
                                 .build())
-                .toList();
+                .collect(Collectors.toList());
 
         reservation.setReservationItems(list);
+
         reservationRepository.save(reservation);
     }
 
     public void unReserve(ReservationCommand command) {
-        Reservation reservation = reservationRepository.findByUserIdAndConcertScheduleId(command.userId(), command.concertScheduleId());
+        Reservation reservation = reservationRepository.findByUserIdAndConcertScheduleId(command.userId(), command.concertScheduleId()).get(0);
         reservation.setStatus(ReservationStatus.EMPTY);
         reservationRepository.save(reservation);
     }

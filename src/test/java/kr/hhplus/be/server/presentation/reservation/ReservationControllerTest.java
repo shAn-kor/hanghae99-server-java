@@ -33,7 +33,7 @@ class ReservationControllerUnitTest {
     void reserve_success() throws AccessDeniedException {
         // given
         UUID userId = UUID.randomUUID();
-        ReservationRequest request = new ReservationRequest(userId, 1L, List.of(1, 2, 3));
+        ReservationRequest request = new ReservationRequest(userId, 1L, List.of(1L, 2L, 3L));
 
         // when
         ResponseEntity.BodyBuilder response = reservationController.reserve(request);

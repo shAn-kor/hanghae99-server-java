@@ -12,7 +12,8 @@ import java.util.UUID;
 public record ReservationCriteria(
         UUID uuid,
         Long concertScheduleId,
-        List<Integer> seatList
+        Long venueId,
+        List<Long> seatList
 ) {
     public ConcertScheduleCommand toConcertScheduleCommand() {
         return ConcertScheduleCommand.builder().concertScheduleId(this.concertScheduleId).build();
@@ -23,6 +24,6 @@ public record ReservationCriteria(
     }
 
     public static SeatCommand toSeatCommand(ReservationCriteria criteria) {
-        return SeatCommand.builder().concertScheduleId(criteria.concertScheduleId()).seatNumbers(criteria.seatList).build();
+        return SeatCommand.builder().venueId(criteria.venueId()).seatNumbers(criteria.seatList).build();
     }
 }

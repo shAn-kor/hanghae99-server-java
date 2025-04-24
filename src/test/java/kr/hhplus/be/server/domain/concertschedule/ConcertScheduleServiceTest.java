@@ -30,19 +30,20 @@ class ConcertScheduleServiceTest {
     void getConcertDates_success() {
         // given
         Long concertId = 1L;
+        Long venueId = 2L;
         Concert concert = mock(Concert.class);
         Venue venue = mock(Venue.class);
         ConcertCommand command = new ConcertCommand(concertId, 1L);
 
         List<ConcertSchedule> mockResult = List.of(
                 ConcertSchedule.builder()
-                        .concert(concert)
-                        .venue(venue)
+                        .concertId(concertId)
+                        .venueId(venueId)
                         .concertDate(LocalDateTime.of(2025, 5, 10, 20, 0))
                         .build(),
                 ConcertSchedule.builder()
-                        .concert(concert)
-                        .venue(venue)
+                        .concertId(concertId)
+                        .venueId(venueId)
                         .concertDate(LocalDateTime.of(2025, 5, 11, 20, 0))
                         .build()
         );

@@ -4,6 +4,7 @@ import kr.hhplus.be.server.application.dto.PaymentCriteria;
 import kr.hhplus.be.server.domain.payment.Payment;
 import kr.hhplus.be.server.domain.point.Point;
 import kr.hhplus.be.server.domain.reservation.Reservation;
+import kr.hhplus.be.server.domain.reservation.ReservationItem;
 import kr.hhplus.be.server.domain.reservation.ReservationStatus;
 import kr.hhplus.be.server.infrastructure.repository.PaymentRepository;
 import kr.hhplus.be.server.infrastructure.repository.PointRepository;
@@ -71,10 +72,8 @@ class PaymentFacadeIntegrationTest {
                 .build();
         Reservation savedReservation = reservationRepository.save(reservation);
 
-        testReservationId = savedReservation.getReservationId();
-
-        reservationRepository.saveItem(new kr.hhplus.be.server.domain.reservation.ReservationItem(testReservationId, 1L));
-        reservationRepository.saveItem(new kr.hhplus.be.server.domain.reservation.ReservationItem(testReservationId, 2L));
+        reservationRepository.saveItem(new ReservationItem(savedReservation, 1L));
+        reservationRepository.saveItem(new ReservationItem(savedReservation, 2L));
     }
 
     @Test

@@ -16,10 +16,7 @@ class ReservationTest {
     @DisplayName("정상적으로 Reservation 생성")
     void createReservation_success() {
         UUID userId = UUID.randomUUID();
-        Reservation reservation = new Reservation(
-                userId,
-                ReservationStatus.WAITING
-        );
+        Reservation reservation = Reservation.builder().userId(userId).status(ReservationStatus.WAITING).build();
 
         assertThat(reservation.getUserId()).isEqualTo(userId);
         assertThat(reservation.getStatus()).isEqualTo(ReservationStatus.WAITING);
@@ -28,10 +25,7 @@ class ReservationTest {
     @Test
     @DisplayName("userId가 null이면 생성 시 예외 발생")
     void createReservation_userId_null() {
-        assertThatThrownBy(() -> new Reservation(
-                null,
-                ReservationStatus.WAITING
-        )).isInstanceOf(IllegalArgumentException.class)
+        assertThatThrownBy(() -> Reservation.builder().userId(null).status(ReservationStatus.WAITING).build()).isInstanceOf(IllegalArgumentException.class)
                 .hasMessage("userId is null");
     }
 
@@ -39,10 +33,7 @@ class ReservationTest {
     @DisplayName("reserve()는 repository.save(this)를 호출한다")
     void reserve_success() {
         UUID userId = UUID.randomUUID();
-        Reservation reservation = new Reservation(
-                userId,
-                ReservationStatus.WAITING
-        );
+        Reservation reservation = Reservation.builder().userId(userId).status(ReservationStatus.WAITING).build();
 
         ReservationRepository mockRepo = mock(ReservationRepository.class);
 

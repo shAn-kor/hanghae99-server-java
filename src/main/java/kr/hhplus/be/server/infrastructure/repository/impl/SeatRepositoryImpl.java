@@ -12,11 +12,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class SeatRepositoryImpl implements SeatRepository {
     private final JpaSeatRepository seatRepository;
-
-    @Override
-    public Seat findById(Long id) {
-        return seatRepository.findById(id).orElse(null);
-    }
+    private final JpaSeatRepository jpaSeatRepository;
 
     @Override
     public Seat choose(Integer seatNumber) {
@@ -34,7 +30,7 @@ public class SeatRepositoryImpl implements SeatRepository {
     }
 
     @Override
-    public Seat getSeat(Long concertScheduleId, Integer seatNumber) {
-        return seatRepository.findByConcertScheduleIdAndSeatNumber(concertScheduleId, seatNumber);
+    public List<Seat> findWithPessimisticLock(Long venueId, List<Long> seatIds) {
+        return jpaSeatRepository.findWithPessimisticLock(venueId, seatIds);
     }
 }
