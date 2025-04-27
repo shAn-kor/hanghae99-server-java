@@ -13,7 +13,7 @@ class SeatTest {
     @DisplayName("정상적인 값으로 Seat 생성")
     void createSeat_success() {
         Seat seat = Seat.builder()
-                .concertScheduleId(1L)
+                .venueId(1L)
                 .seatNumber(10)
                 .build();
 
@@ -24,7 +24,7 @@ class SeatTest {
     @DisplayName("seatNumber가 0 이하이면 예외 발생")
     void createSeat_seatNumber_zeroOrNegative() {
         assertThatThrownBy(() -> Seat.builder()
-                .concertScheduleId(1L)
+                .venueId(1L)
                 .seatNumber(0)
                 .build()
         ).isInstanceOf(IllegalArgumentException.class)
@@ -35,7 +35,7 @@ class SeatTest {
     @DisplayName("seatNumber가 50 초과이면 예외 발생")
     void createSeat_seatNumber_tooHigh() {
         assertThatThrownBy(() -> Seat.builder()
-                .concertScheduleId(1L)
+                .venueId(1L)
                 .seatNumber(51)
                 .build()
         ).isInstanceOf(IllegalArgumentException.class)
@@ -47,7 +47,7 @@ class SeatTest {
     void chooseSeat_success() {
         // given
         Seat seat = Seat.builder()
-                .concertScheduleId(1L)
+                .venueId(1L)
                 .seatNumber(5)
                 .build();
 

@@ -2,6 +2,7 @@ package kr.hhplus.be.server.infrastructure.repository.impl;
 
 import kr.hhplus.be.server.domain.reservation.Reservation;
 import kr.hhplus.be.server.domain.reservation.ReservationItem;
+import kr.hhplus.be.server.domain.reservation.ReservationStatus;
 import kr.hhplus.be.server.infrastructure.jpa.JpaReservationItemRepository;
 import kr.hhplus.be.server.infrastructure.jpa.JpaReservationRepository;
 import kr.hhplus.be.server.infrastructure.repository.ReservationRepository;
@@ -30,7 +31,7 @@ public class ReservationRepositoryImpl implements ReservationRepository {
 
     @Override
     public List<Reservation> getDeadReservations(LocalDateTime deadline) {
-        return jpaReservationRepository.findByCreatedAtBefore(deadline);
+        return jpaReservationRepository.findByCreatedAtBeforeAndStatusNot(deadline, ReservationStatus.RESERVED);
     }
 
     @Override
@@ -45,11 +46,21 @@ public class ReservationRepositoryImpl implements ReservationRepository {
 
     @Override
     public List<ReservationItem> getItems(Long reservationId) {
-        return jpaReservationItemRepository.findByReservationId(reservationId);
+        return jpaReservationItemRepository.findByReservation_ReservationId(reservationId);
     }
 
     @Override
     public List<ReservationItem> getDeadItems(LocalDateTime deadline) {
         return jpaReservationItemRepository.getDeadItems(deadline);
+    }
+
+    @Override
+    public List<ReservationItem> getReservedItems(Long concertScheduleId) {
+        return jpaReservationItemRepository.getReservedItems(concertScheduleId);
+    }
+
+    @Override
+    public List<Reservation> findByUserIdAndConcertScheduleId(UUID uuid, Long concertScheduleId) {
+        return jpaReservationRepository.findByUserIdAndConcertScheduleId(uuid, concertScheduleId);
     }
 }

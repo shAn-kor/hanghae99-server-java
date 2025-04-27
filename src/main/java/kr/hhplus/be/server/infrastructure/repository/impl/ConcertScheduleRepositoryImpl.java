@@ -15,6 +15,11 @@ public class ConcertScheduleRepositoryImpl implements ConcertScheduleRepository 
 
     @Override
     public List<ConcertSchedule> getConcertDates(Long concertId) {
-        return jpaConcertScheduleRepository.findByConcert_ConcertId(concertId);
+        return jpaConcertScheduleRepository.findByConcertId(concertId);
+    }
+
+    @Override
+    public ConcertSchedule getConcertSchedule(Long concertScheduleId) {
+        return jpaConcertScheduleRepository.findById(concertScheduleId).orElse(null);
     }
 }

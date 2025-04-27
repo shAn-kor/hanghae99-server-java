@@ -6,12 +6,12 @@ import java.util.List;
 
 @Builder
 public record SeatCommand(
-        Long concertScheduleId,
-        List<Integer> seatNumbers
+        Long venueId,
+        List<Long> seatNumbers
 ) {
 
-    public SeatCommand (Long concertScheduleId, List<Integer> seatNumbers) {
-        this.concertScheduleId = concertScheduleId;
+    public SeatCommand (Long venueId, List<Long> seatNumbers) {
+        this.venueId = venueId;
         this.seatNumbers = seatNumbers;
     }
 //    public SeatCommand {

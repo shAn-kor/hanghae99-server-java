@@ -22,32 +22,14 @@ class SeatServiceTest {
     }
 
     @Test
-    @DisplayName("getEmptySeats()는 seatRepository에서 비어 있는 좌석을 조회한다")
-    void getEmptySeats_returnsEmptySeats() {
-        // given
-        List<Seat> mockSeats = List.of(
-                new Seat( 101L, 10, SeatStatus.EMPTY),
-                new Seat( 101L, 11, SeatStatus.EMPTY)
-        );
-        when(seatRepository.getEmptySeats()).thenReturn(mockSeats);
-
-        // when
-        List<Seat> result = seatService.getEmptySeats();
-
-        // then
-        assertThat(result).hasSize(2);
-        verify(seatRepository).getEmptySeats();
-    }
-
-    @Test
     @DisplayName("reserveSeat()는 seatNumbers로 좌석을 선택한다")
     void reserveSeat_reservesGivenSeats() {
         // given
-        List<Integer> seatNumbers = List.of(10, 11);
+        List<Long> seatNumbers = List.of(10L, 11L);
         SeatCommand command = new SeatCommand(1L, seatNumbers);
 
-        when(seatRepository.choose(10)).thenReturn(new Seat( 101L, 10, SeatStatus.RESERVED));
-        when(seatRepository.choose(11)).thenReturn(new Seat( 101L, 11, SeatStatus.RESERVED));
+        when(seatRepository.choose(10)).thenReturn(new Seat( 101L, 10));
+        when(seatRepository.choose(11)).thenReturn(new Seat( 101L, 11));
 
         // when
         List<Seat> result = seatService.reserveSeat(command);
@@ -56,20 +38,5 @@ class SeatServiceTest {
         assertThat(result).hasSize(2);
         verify(seatRepository).choose(10);
         verify(seatRepository).choose(11);
-    }
-
-    @Test
-    @DisplayName("unReserveSeat()는 좌석 ID로 해제 요청을 한다")
-    void unReserveSeat_shouldCallRepository() {
-        // given
-        SeatIdCommand command = new SeatIdCommand(99L);
-        Seat seat = mock(Seat.class);
-
-        // when
-        seatService.unReserveSeat(command);
-
-        // then
-        verify(seat).unReserve();
-        verify(seatRepository).save(seat);
     }
 }

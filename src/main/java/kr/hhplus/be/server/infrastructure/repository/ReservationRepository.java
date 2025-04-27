@@ -21,4 +21,8 @@ public interface ReservationRepository {
     List<ReservationItem> getItems(Long reservationId);
 
     List<ReservationItem> getDeadItems(LocalDateTime deadline);
+
+    List<ReservationItem> getReservedItems(Long concertScheduleId);
+
+    List<Reservation> findByUserIdAndConcertScheduleId(UUID uuid, Long concertScheduleId);
 }

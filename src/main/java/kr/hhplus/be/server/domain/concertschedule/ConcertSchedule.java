@@ -1,8 +1,9 @@
 package kr.hhplus.be.server.domain.concertschedule;
 
-import jakarta.persistence.*;
-import kr.hhplus.be.server.domain.Venue.Venue;
-import kr.hhplus.be.server.domain.concert.Concert;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -20,21 +21,19 @@ public class ConcertSchedule {
     @GeneratedValue
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "concert_id", referencedColumnName = "concert_id")
-    private Concert concert;
+    @Column(name = "concert_id", columnDefinition = "bigint", updatable = false, nullable = false)
+    private Long concertId;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "venue_id", referencedColumnName = "venue_id")
-    private Venue venue;
+    @Column(name = "venue_id", columnDefinition = "bigint", updatable = false)
+    private Long venueId;
 
     @Column(name = "date", columnDefinition = "timestamp", updatable = false)
     @CreatedDate
     private LocalDateTime concertDate;
 
     @Builder
-    public ConcertSchedule(Concert concert, Venue venue, LocalDateTime concertDate) {
-        if (concert == null) {
+    public ConcertSchedule(Long concertId, Long venueId, LocalDateTime concertDate) {
+        if (concertId == null) {
             throw new IllegalArgumentException("concert must not be null");
         }
 
@@ -42,8 +41,8 @@ public class ConcertSchedule {
             throw new IllegalArgumentException("concertDate must be before now");
         }
 
-        this.concert = concert;
-        this.venue = venue;
+        this.concertId = concertId;
+        this.venueId = venueId;
         this.concertDate = concertDate;
     }
 }

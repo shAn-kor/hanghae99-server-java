@@ -5,7 +5,6 @@ import kr.hhplus.be.server.domain.reservation.Reservation;
 import kr.hhplus.be.server.domain.reservation.ReservationService;
 import kr.hhplus.be.server.domain.seat.Seat;
 import kr.hhplus.be.server.domain.seat.SeatService;
-import kr.hhplus.be.server.domain.seat.SeatStatus;
 import kr.hhplus.be.server.domain.token.Token;
 import kr.hhplus.be.server.domain.token.TokenService;
 import kr.hhplus.be.server.infrastructure.repository.ReservationRepository;
@@ -90,9 +89,8 @@ class ReservationFacadeIntegrationTest {
         // 예약 가능한 좌석 세팅
         for (int i = 1; i <= 5; i++) {
             Seat seat = Seat.builder()
-                    .concertScheduleId(1L)
+                    .venueId(1L)
                     .seatNumber(i)
-                    .status(SeatStatus.EMPTY)
                     .build();
             seatRepository.save(seat);
         }
@@ -104,7 +102,7 @@ class ReservationFacadeIntegrationTest {
         ReservationCriteria criteria = ReservationCriteria.builder()
                 .uuid(userId)
                 .concertScheduleId(1L)
-                .seatList(List.of(1, 2))
+                .seatList(List.of(1L, 2L))
                 .build();
 
         reservationFacade.reserveSeats(criteria);
@@ -120,7 +118,7 @@ class ReservationFacadeIntegrationTest {
         ReservationCriteria criteria = ReservationCriteria.builder()
                 .uuid(invalidUser)
                 .concertScheduleId(1L)
-                .seatList(List.of(1, 2))
+                .seatList(List.of(1L, 2L))
                 .build();
 
         assertThatThrownBy(() -> reservationFacade.reserveSeats(criteria))

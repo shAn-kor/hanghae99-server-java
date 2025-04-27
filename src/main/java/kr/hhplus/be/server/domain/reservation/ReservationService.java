@@ -1,33 +1,54 @@
 package kr.hhplus.be.server.domain.reservation;
 
-import jakarta.persistence.EntityManager;
 import kr.hhplus.be.server.application.dto.ReservationResult;
 import kr.hhplus.be.server.infrastructure.repository.ReservationRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class ReservationService {
     private final ReservationRepository reservationRepository;
-    private final EntityManager entityManager;
 
+    @Transactional
     public void reserve(ReservationCommand command) {
         Reservation reservation = reservationRepository.save(command.toReservation());
-        entityManager.flush(); // ID가 바로 생성되도록 함
 
         List<ReservationItem> list = command.items().stream()
                 .map(rI ->
                         ReservationItem.builder()
-                                .reservationId(reservation.getReservationId())
+                                .reservation(reservation)
                                 .seatId(rI.seatId())
                                 .build())
-                .toList();
+                .collect(Collectors.toList());
 
-        list.forEach(reservationRepository::saveItem);
+        reservation.setReservationItems(list);
+
+        reservationRepository.save(reservation);
+    }
+
+    public void unReserve(ReservationCommand command) {
+        Reservation reservation = reservationRepository.findByUserIdAndConcertScheduleId(command.userId(), command.concertScheduleId()).get(0);
+        reservation.setStatus(ReservationStatus.EMPTY);
+        reservationRepository.save(reservation);
+    }
+
+    @Scheduled(fixedRate = 60000)
+    public void autoCancelReservation() {
+        LocalDateTime deadline = LocalDateTime.now().minusMinutes(3);
+        List<Reservation> expiredReservations = reservationRepository.getDeadReservations(deadline);
+        expiredReservations.forEach(reservation -> {
+            reservation.setStatus(ReservationStatus.EXPIRED);
+            reservationRepository.save(reservation);
+        });
     }
 
     public List<ReservationItem> getDeadItems(DeadlineItemCriteria deadlineItemCriteria) {
@@ -37,9 +58,12 @@ public class ReservationService {
     @Transactional(readOnly = true)
     public ReservationResult getTotalAmount(ReservationIdCommand reservationIdCommand) {
         Reservation reservation = reservationRepository.getReservation(reservationIdCommand.reservationId());
-        int itemCount = reservationRepository.getItems(reservation.getReservationId()).size();
+        int itemCount = reservation.getReservationItems().size();
 
         return new ReservationResult(itemCount * 500L);
     }
 
+    public List<ReservationItem> getReservedItems(ReservationCommand command) {
+        return reservationRepository.getReservedItems(command.concertScheduleId());
+    }
 }

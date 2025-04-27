@@ -60,6 +60,7 @@ class ReservationServiceIntegrationTest {
 
         ReservationCommand command = new ReservationCommand(
                 userId,
+                1L,
                 ReservationStatus.WAITING,
                 LocalDateTime.now(),
                 itemCommands
@@ -82,9 +83,9 @@ class ReservationServiceIntegrationTest {
         DeadlineItemCriteria criteria = new DeadlineItemCriteria(deadline);
 
         Reservation reservation = reservationRepository.save(
-                new Reservation(userId, ReservationStatus.WAITING)
+                Reservation.builder().userId(userId).status(ReservationStatus.RESERVED).build()
         );
-        reservationRepository.saveItem(new ReservationItem(reservation.getReservationId(), 1L));
+        reservationRepository.saveItem(new ReservationItem(reservation, 1L));
 
         // when
         List<ReservationItem> result = reservationService.getDeadItems(criteria);
@@ -97,10 +98,10 @@ class ReservationServiceIntegrationTest {
     void getTotalAmount_아이템수에따라금액계산() {
         // given
         Reservation reservation = reservationRepository.save(
-                new Reservation(userId, ReservationStatus.RESERVED)
+                Reservation.builder().userId(userId).status(ReservationStatus.RESERVED).build()
         );
-        reservationRepository.saveItem(new ReservationItem(reservation.getReservationId(), 1L));
-        reservationRepository.saveItem(new ReservationItem(reservation.getReservationId(), 2L));
+        reservationRepository.saveItem(new ReservationItem(reservation, 1L));
+        reservationRepository.saveItem(new ReservationItem(reservation, 2L));
 
         ReservationIdCommand idCommand = new ReservationIdCommand(reservation.getReservationId());
 

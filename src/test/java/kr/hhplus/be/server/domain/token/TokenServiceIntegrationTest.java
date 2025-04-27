@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.UUID;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.assertj.core.api.AssertionsForClassTypes.assertThatNoException;
 
 @SpringBootTest
 //@TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -89,9 +90,9 @@ class TokenServiceIntegrationTest {
         tokenRepository.save(token);
 
         // when
-        boolean isValid = tokenService.isValid(new TokenCommand(userId));
+
 
         // then
-        assertThat(isValid).isTrue();
+        assertThatNoException().isThrownBy(() -> tokenService.isValid(new TokenCommand(userId)));
     }
 }

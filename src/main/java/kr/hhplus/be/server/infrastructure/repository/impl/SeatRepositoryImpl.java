@@ -1,7 +1,6 @@
 package kr.hhplus.be.server.infrastructure.repository.impl;
 
 import kr.hhplus.be.server.domain.seat.Seat;
-import kr.hhplus.be.server.domain.seat.SeatStatus;
 import kr.hhplus.be.server.infrastructure.jpa.JpaSeatRepository;
 import kr.hhplus.be.server.infrastructure.repository.SeatRepository;
 import lombok.RequiredArgsConstructor;
@@ -13,11 +12,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class SeatRepositoryImpl implements SeatRepository {
     private final JpaSeatRepository seatRepository;
-
-    @Override
-    public Seat findById(Long id) {
-        return seatRepository.findById(id).orElse(null);
-    }
+    private final JpaSeatRepository jpaSeatRepository;
 
     @Override
     public Seat choose(Integer seatNumber) {
@@ -25,8 +20,8 @@ public class SeatRepositoryImpl implements SeatRepository {
     }
 
     @Override
-    public List<Seat> getEmptySeats() {
-        return seatRepository.findByStatus(SeatStatus.EMPTY);
+    public List<Seat> getEmptySeats(Long venueId, List<Long> reservedSeatIds) {
+        return seatRepository.getUnreservedSeats(venueId, reservedSeatIds);
     }
 
     @Override
@@ -35,7 +30,7 @@ public class SeatRepositoryImpl implements SeatRepository {
     }
 
     @Override
-    public Seat getSeat(Long concertScheduleId, Integer seatNumber) {
-        return seatRepository.findByConcertScheduleIdAndSeatNumber(concertScheduleId, seatNumber);
+    public List<Seat> findWithPessimisticLock(Long venueId, List<Long> seatIds) {
+        return jpaSeatRepository.findWithPessimisticLock(venueId, seatIds);
     }
 }

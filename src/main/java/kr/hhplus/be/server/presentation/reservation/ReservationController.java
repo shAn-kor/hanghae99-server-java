@@ -2,7 +2,9 @@ package kr.hhplus.be.server.presentation.reservation;
 
 import jakarta.validation.Valid;
 import kr.hhplus.be.server.application.ReservationFacade;
-import kr.hhplus.be.server.presentation.reservation.object.ReservationRequest;
+import kr.hhplus.be.server.application.ReservationItemResult;
+import kr.hhplus.be.server.domain.reservation.ReservationCommand;
+import kr.hhplus.be.server.domain.reservation.ReservationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -20,6 +22,13 @@ import static org.springframework.http.ResponseEntity.ok;
 @RequestMapping("/reservation")
 public class ReservationController implements ReservationApi {
     private final ReservationFacade reservationFacade;
+    private final ReservationService reservationService;
+
+    @Override
+    public ReservationResponse emptyseats(@Valid @RequestBody ReservationRequest request) {
+        ReservationItemResult result = reservationFacade.getEmptySeat(ReservationRequest.toCriteria(request));
+        return ReservationResponse.builder().seatIdList(result.seatIdList()).build();
+    }
 
     @PostMapping("/reserve")
     public BodyBuilder reserve(@Valid @RequestBody ReservationRequest request) {
@@ -28,6 +37,13 @@ public class ReservationController implements ReservationApi {
         } catch (AccessDeniedException e) {
             return ResponseEntity.badRequest();
         }
+        return ok();
+    }
+
+    @Override
+    public BodyBuilder unReserve(ReservationRequest request) {
+        ReservationCommand command = ReservationCommand.builder().userId(request.uuid()).concertScheduleId(request.concertDateTimeId()).build();
+        reservationService.unReserve(command);
         return ok();
     }
 }

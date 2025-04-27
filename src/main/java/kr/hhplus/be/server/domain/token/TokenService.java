@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
+import java.nio.file.AccessDeniedException;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -41,12 +42,11 @@ public class TokenService {
         }
     }
 
-    public boolean isValid(TokenCommand command) {
+    public void isValid(TokenCommand command) throws AccessDeniedException {
         Token token = tokenRepository.getToken(command.userId());
         if (token == null) {
-            return false;
+            throw new AccessDeniedException("대기열을 통과하지 못했습니다.");
         }
-        return token.getValid();
     }
 
     public void endToken(TokenCommand tokenCommand) {

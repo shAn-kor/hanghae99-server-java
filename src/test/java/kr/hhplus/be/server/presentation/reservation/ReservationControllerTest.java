@@ -1,7 +1,7 @@
 package kr.hhplus.be.server.presentation.reservation;
 
 import kr.hhplus.be.server.application.ReservationFacade;
-import kr.hhplus.be.server.presentation.reservation.object.ReservationRequest;
+import kr.hhplus.be.server.domain.reservation.ReservationService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -12,17 +12,20 @@ import java.util.List;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
 
 class ReservationControllerUnitTest {
 
     private ReservationFacade reservationFacade;
+    private ReservationService reservationService;
     private ReservationController reservationController;
 
     @BeforeEach
     void setUp() {
         reservationFacade = mock(ReservationFacade.class);
-        reservationController = new ReservationController(reservationFacade);
+        reservationService = mock(ReservationService.class);
+        reservationController = new ReservationController(reservationFacade, reservationService);
     }
 
     @Test
@@ -30,7 +33,7 @@ class ReservationControllerUnitTest {
     void reserve_success() throws AccessDeniedException {
         // given
         UUID userId = UUID.randomUUID();
-        ReservationRequest request = new ReservationRequest(userId, 1L, List.of(1, 2, 3));
+        ReservationRequest request = new ReservationRequest(userId, 1L, List.of(1L, 2L, 3L));
 
         // when
         ResponseEntity.BodyBuilder response = reservationController.reserve(request);

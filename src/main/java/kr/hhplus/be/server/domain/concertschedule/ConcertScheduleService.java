@@ -15,4 +15,8 @@ public class ConcertScheduleService {
     public List<ConcertSchedule> getConcertDates(ConcertCommand command) {
         return concertScheduleRepository.getConcertDates(command.concertId());
     }
+
+    public ConcertSchedule getConcertSchedule(ConcertScheduleCommand concertScheduleCommand) {
+        return concertScheduleRepository.getConcertSchedule(concertScheduleCommand.concertScheduleId());
+    }
 }
