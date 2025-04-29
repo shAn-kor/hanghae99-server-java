@@ -1,7 +1,7 @@
 package kr.hhplus.be.server.presentation.reservation;
 
 import jakarta.validation.constraints.NotNull;
-import kr.hhplus.be.server.application.dto.ReservationCriteria;
+import kr.hhplus.be.server.application.ReservationCriteria;
 
 import java.util.List;
 import java.util.UUID;

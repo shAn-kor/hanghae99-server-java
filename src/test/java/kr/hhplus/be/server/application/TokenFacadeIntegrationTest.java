@@ -1,7 +1,5 @@
 package kr.hhplus.be.server.application;
 
-import kr.hhplus.be.server.application.dto.TokenResult;
-import kr.hhplus.be.server.application.dto.UserCriteria;
 import kr.hhplus.be.server.domain.point.Point;
 import kr.hhplus.be.server.domain.user.User;
 import kr.hhplus.be.server.exception.InsufficientBalanceException;

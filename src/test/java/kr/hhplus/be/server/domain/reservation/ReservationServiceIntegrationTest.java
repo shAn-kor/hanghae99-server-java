@@ -1,6 +1,6 @@
 package kr.hhplus.be.server.domain.reservation;
 
-import kr.hhplus.be.server.application.dto.ReservationResult;
+import kr.hhplus.be.server.application.ReservationResult;
 import kr.hhplus.be.server.infrastructure.repository.ReservationRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

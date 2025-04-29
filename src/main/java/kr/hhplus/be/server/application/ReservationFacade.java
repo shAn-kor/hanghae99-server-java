@@ -1,6 +1,5 @@
 package kr.hhplus.be.server.application;
 
-import kr.hhplus.be.server.application.dto.ReservationCriteria;
 import kr.hhplus.be.server.domain.concertschedule.ConcertSchedule;
 import kr.hhplus.be.server.domain.concertschedule.ConcertScheduleService;
 import kr.hhplus.be.server.domain.reservation.*;

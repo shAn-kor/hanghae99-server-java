@@ -1,4 +1,4 @@
-package kr.hhplus.be.server.application.dto;
+package kr.hhplus.be.server.application;
 
 import kr.hhplus.be.server.domain.concertschedule.ConcertScheduleCommand;
 import kr.hhplus.be.server.domain.reservation.ReservationCommand;

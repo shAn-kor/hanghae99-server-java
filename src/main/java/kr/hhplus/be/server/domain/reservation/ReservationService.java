@@ -1,6 +1,6 @@
 package kr.hhplus.be.server.domain.reservation;
 
-import kr.hhplus.be.server.application.dto.ReservationResult;
+import kr.hhplus.be.server.application.ReservationResult;
 import kr.hhplus.be.server.infrastructure.repository.ReservationRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

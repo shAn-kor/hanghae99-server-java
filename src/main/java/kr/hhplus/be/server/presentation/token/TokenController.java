@@ -2,7 +2,7 @@ package kr.hhplus.be.server.presentation.token;
 
 import jakarta.validation.Valid;
 import kr.hhplus.be.server.application.TokenFacade;
-import kr.hhplus.be.server.application.dto.UserCriteria;
+import kr.hhplus.be.server.application.UserCriteria;
 import kr.hhplus.be.server.domain.token.Token;
 import kr.hhplus.be.server.domain.token.TokenCommand;
 import kr.hhplus.be.server.domain.token.TokenService;

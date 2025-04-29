@@ -1,7 +1,5 @@
 package kr.hhplus.be.server.application;
 
-import kr.hhplus.be.server.application.dto.PaymentCriteria;
-import kr.hhplus.be.server.application.dto.ReservationResult;
 import kr.hhplus.be.server.domain.payment.PaymentCommand;
 import kr.hhplus.be.server.domain.payment.PaymentService;
 import kr.hhplus.be.server.domain.point.PointCommand;

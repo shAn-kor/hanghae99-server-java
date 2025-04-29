@@ -1,7 +1,5 @@
 package kr.hhplus.be.server.application;
 
-import kr.hhplus.be.server.application.dto.TokenResult;
-import kr.hhplus.be.server.application.dto.UserCriteria;
 import kr.hhplus.be.server.domain.point.PointCommand;
 import kr.hhplus.be.server.domain.point.PointService;
 import kr.hhplus.be.server.domain.token.Token;

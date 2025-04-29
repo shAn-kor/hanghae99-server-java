@@ -1,8 +1,5 @@
 package kr.hhplus.be.server.application;
 
-import kr.hhplus.be.server.application.dto.PointCriteria;
-import kr.hhplus.be.server.application.dto.PointHistoryResult;
-import kr.hhplus.be.server.application.dto.PointResult;
 import kr.hhplus.be.server.domain.point.Point;
 import kr.hhplus.be.server.infrastructure.repository.PointHistoryRepository;
 import kr.hhplus.be.server.infrastructure.repository.PointRepository;

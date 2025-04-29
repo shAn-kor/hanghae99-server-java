@@ -2,7 +2,7 @@ package kr.hhplus.be.server.presentation.point.object;
 
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PositiveOrZero;
-import kr.hhplus.be.server.application.dto.PointCriteria;
+import kr.hhplus.be.server.application.PointCriteria;
 
 import java.util.UUID;
 
