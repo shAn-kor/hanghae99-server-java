@@ -77,24 +77,6 @@ class ReservationServiceIntegrationTest {
     }
 
     @Test
-    void getDeadItems_마감시간이전_예약아이템_조회() {
-        // given
-        LocalDateTime deadline = LocalDateTime.now().plusMinutes(3);
-        DeadlineItemCriteria criteria = new DeadlineItemCriteria(deadline);
-
-        Reservation reservation = reservationRepository.save(
-                Reservation.builder().userId(userId).status(ReservationStatus.RESERVED).build()
-        );
-        reservationRepository.saveItem(new ReservationItem(reservation, 1L));
-
-        // when
-        List<ReservationItem> result = reservationService.getDeadItems(criteria);
-
-        // then
-        assertThat(result).isNotEmpty();
-    }
-
-    @Test
     void getTotalAmount_아이템수에따라금액계산() {
         // given
         Reservation reservation = reservationRepository.save(

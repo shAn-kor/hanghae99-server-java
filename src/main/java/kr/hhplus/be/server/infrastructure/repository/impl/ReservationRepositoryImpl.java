@@ -56,7 +56,8 @@ public class ReservationRepositoryImpl implements ReservationRepository {
 
     @Override
     public List<ReservationItem> getReservedItems(Long concertScheduleId) {
-        return jpaReservationItemRepository.getReservedItems(concertScheduleId);
+        LocalDateTime deadline = LocalDateTime.now().minusMinutes(5);
+        return jpaReservationItemRepository.getReservedItems(concertScheduleId, deadline);
     }
 
     @Override

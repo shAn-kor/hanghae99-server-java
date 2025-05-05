@@ -12,7 +12,6 @@ import java.util.List;
 @RequiredArgsConstructor
 public class SeatRepositoryImpl implements SeatRepository {
     private final JpaSeatRepository seatRepository;
-    private final JpaSeatRepository jpaSeatRepository;
 
     @Override
     public Seat choose(Integer seatNumber) {
@@ -31,6 +30,6 @@ public class SeatRepositoryImpl implements SeatRepository {
 
     @Override
     public List<Seat> findWithPessimisticLock(Long venueId, List<Long> seatIds) {
-        return jpaSeatRepository.findWithPessimisticLock(venueId, seatIds);
+        return seatRepository.findWithPessimisticLock(venueId, seatIds);
     }
 }
