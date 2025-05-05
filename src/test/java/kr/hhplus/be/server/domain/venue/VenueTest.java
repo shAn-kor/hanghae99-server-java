@@ -1,4 +1,4 @@
-package kr.hhplus.be.server.domain.Venue;
+package kr.hhplus.be.server.domain.venue;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

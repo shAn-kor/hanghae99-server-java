@@ -1,6 +1,6 @@
 package kr.hhplus.be.server.presentation.concert.object;
 
-import kr.hhplus.be.server.domain.Venue.Venue;
+import kr.hhplus.be.server.domain.venue.Venue;
 import lombok.Builder;
 
 import java.util.List;
