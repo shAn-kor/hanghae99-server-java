@@ -9,6 +9,8 @@ import java.util.concurrent.TimeUnit;
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
 public @interface DistributedLock {
+    String prefix(); // 락 키 접두사 (도메인 의미 포함)
+
     String key();
 
     TimeUnit timeUnit() default TimeUnit.SECONDS;
