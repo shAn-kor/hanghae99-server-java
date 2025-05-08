@@ -5,9 +5,10 @@ import lombok.Builder;
 
 @Builder
 public record UserCriteria(
-        String phoneNumber
+        String phoneNumber,
+        Long concertId
 ) {
     public static UserCriteria from (GenerateTokenRequest request) {
-        return UserCriteria.builder().phoneNumber(request.phoneNumber()).build();
+        return UserCriteria.builder().phoneNumber(request.phoneNumber()).concertId(request.concertId()).build();
     }
 }

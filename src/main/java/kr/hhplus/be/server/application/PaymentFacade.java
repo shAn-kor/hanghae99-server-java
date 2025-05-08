@@ -27,7 +27,7 @@ public class PaymentFacade {
 
         pointService.usePoint(pointCommand);
 
-        tokenService.endToken(new TokenCommand(criteria.userId()));
+        tokenService.endToken(TokenCommand.builder().userId(criteria.userId()).build());
 
         PaymentCommand paymentCommand = PaymentCommand.builder()
                 .reservationId(criteria.reservationId())

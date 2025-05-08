@@ -6,6 +6,7 @@ import java.util.UUID;
 
 @Builder
 public record TokenCommand(
-        UUID userId
+        UUID userId,
+        Long concertId
 ) {
 }
