@@ -4,12 +4,14 @@ import kr.hhplus.be.server.exception.InsufficientBalanceException;
 import kr.hhplus.be.server.infrastructure.repository.PointRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
 public class PointService {
     private final PointRepository pointRepository;
 
+    @Transactional(readOnly = true)
     public Point getPointByUserId(PointCommand command) {
         return pointRepository.getPoint(command.userId());
     }

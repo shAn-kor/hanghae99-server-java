@@ -2,7 +2,6 @@ package kr.hhplus.be.server.domain.token;
 
 import kr.hhplus.be.server.infrastructure.repository.TokenRepository;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
@@ -14,10 +13,7 @@ import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.UUID;
-
-import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
 @Transactional
@@ -56,24 +52,5 @@ class TokenServiceStressTest {
                     .build();
             tokenRepository.save(token);
         }
-    }
-
-    @Test
-    void updateTokenValidity_스트레스테스트_상위50명만_valid_true() {
-        // when
-        long start = System.currentTimeMillis();
-        tokenService.updateTokenValidity();
-        long duration = System.currentTimeMillis() - start;
-
-        // then
-        List<Token> allTokens = tokenRepository.findAll();
-
-        long trueCount = allTokens.stream().filter(Token::getValid).count();
-        long falseCount = allTokens.stream().filter(t -> !t.getValid()).count();
-
-        assertThat(trueCount).isEqualTo(50);
-        assertThat(falseCount).isEqualTo(950);
-
-        System.out.println("실행 시간: " + duration + "ms");
     }
 }

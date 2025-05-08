@@ -3,6 +3,7 @@ package kr.hhplus.be.server.domain.token;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.nio.file.AccessDeniedException;
 import java.time.Duration;
@@ -22,6 +23,7 @@ public class RedisTokenService implements TokenService {
 
 
     @Override
+    @Transactional
     public Token generateToken(TokenCommand command) {
         UUID userId = command.userId();
         Long concertId = command.concertId();
@@ -62,6 +64,7 @@ public class RedisTokenService implements TokenService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Token getToken(TokenCommand tokenCommand) {
         UUID userId = tokenCommand.userId();
         Long concertId = tokenCommand.concertId();
@@ -96,19 +99,21 @@ public class RedisTokenService implements TokenService {
     }
 
     @Override
+    @Transactional
     public void isValid(TokenCommand command) throws AccessDeniedException {
         UUID userId = command.userId();
         Long concertId = command.concertId();
 
         String activeKey = "active:concert:" + concertId;
 
-        boolean isActive = Boolean.TRUE.equals(redisTemplate.opsForSet().isMember(activeKey, userId));
+        boolean isActive = Boolean.TRUE.equals(redisTemplate.opsForSet().isMember(activeKey, userId.toString()));
         if (!isActive) {
             throw new AccessDeniedException("활성 대기열에 포함되지 않은 사용자입니다.");
         }
     }
 
     @Override
+    @Transactional
     public void endToken(TokenCommand command) {
         UUID userId = command.userId();
         Long concertId = command.concertId();
@@ -123,6 +128,7 @@ public class RedisTokenService implements TokenService {
     }
 
     @Override
+    @Transactional
     public void fillActiveQueue(TokenCommand command) {
         Long concertId = command.concertId();
 
@@ -151,6 +157,7 @@ public class RedisTokenService implements TokenService {
     }
 
     @Override
+    @Transactional
     public void endActiveToken(TokenCommand command) {
         UUID userId = command.userId();
         Long concertId = command.concertId();

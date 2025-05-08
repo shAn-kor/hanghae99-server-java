@@ -12,6 +12,6 @@ public record ReservationRequest(
         @NotNull List<Long> seatList
         ) {
         public static ReservationCriteria toCriteria(@NotNull ReservationRequest request) {
-                return ReservationCriteria.builder().uuid(request.uuid).seatList(request.seatList).build();
+                return ReservationCriteria.builder().uuid(request.uuid).seatList(request.seatList).concertScheduleId(request.concertDateTimeId()).build();
         }
 }

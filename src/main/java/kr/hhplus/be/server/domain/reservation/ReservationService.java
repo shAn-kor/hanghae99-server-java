@@ -33,6 +33,7 @@ public class ReservationService {
         reservationRepository.save(reservation);
     }
 
+    @Transactional
     public void unReserve(ReservationCommand command) {
         Reservation reservation = reservationRepository.findByUserIdAndConcertScheduleId(command.userId(), command.concertScheduleId()).get(0);
         reservation.setStatus(ReservationStatus.EMPTY);

@@ -1,7 +1,9 @@
 package kr.hhplus.be.server.presentation.token.object;
 
 import jakarta.validation.constraints.Pattern;
+import lombok.Builder;
 
+@Builder
 public record GenerateTokenRequest (
         @Pattern(
                 regexp = "^010-\\d{4}-\\d{4}$",

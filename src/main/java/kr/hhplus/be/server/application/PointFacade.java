@@ -7,6 +7,7 @@ import kr.hhplus.be.server.domain.pointhistory.PointHistoryCommand;
 import kr.hhplus.be.server.domain.pointhistory.PointHistoryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -18,6 +19,7 @@ public class PointFacade {
     private final PointService pointService;
     private final PointHistoryService pointHistoryService;
 
+    @Transactional(readOnly = true)
     public PointResult getPoint(PointCriteria criteria) {
         Point point = pointService.getPointByUserId(criteria.toPointCommand());
 
@@ -30,6 +32,7 @@ public class PointFacade {
         return PointResult.builder().uuid(point.getUserId()).point(point.getBalance()).build();
     }
 
+    @Transactional
     public void chargePoint(PointCriteria criteria) {
         pointService.chargePoint(criteria.toPointCommand());
         Point point = pointService.getPointByUserId(criteria.toPointCommand());
@@ -40,6 +43,7 @@ public class PointFacade {
         pointHistoryService.savePointHistory(command);
     }
 
+    @Transactional
     public void usePoint(PointCriteria criteria) {
         pointService.usePoint(criteria.toPointCommand());
         Point point = pointService.getPointByUserId(criteria.toPointCommand());
@@ -50,6 +54,7 @@ public class PointFacade {
         pointHistoryService.savePointHistory(command);
     }
 
+    @Transactional(readOnly = true)
     public List<PointHistoryResult> getPointHistory(PointCriteria pointCriteria) {
         Point point = pointService.getPointByUserId(pointCriteria.toPointCommand());
         List<PointHistory> historyList = pointHistoryService.getPointHistoryByPointId(
