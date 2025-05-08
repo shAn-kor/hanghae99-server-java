@@ -59,6 +59,7 @@ class ReservationServiceIntegrationTest {
         itemCommands.add(new ReservationItemCommand( 11L));
 
         ReservationCommand command = new ReservationCommand(
+                null,
                 userId,
                 1L,
                 ReservationStatus.WAITING,

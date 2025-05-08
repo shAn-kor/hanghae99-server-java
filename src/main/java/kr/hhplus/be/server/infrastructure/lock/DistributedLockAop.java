@@ -59,6 +59,9 @@ public class DistributedLockAop {
                 throw new LockAcquisitionException("분산 락 획득 실패", new SQLException());
             }
 
+            log.info("🔐 LOCK KEY = {}", key);
+            log.info("🔐 LOCK ACQUIRED = {}", rLock);
+
             registerLockReleaseAfterTransactionCommit(rLock);
 
             return joinPoint.proceed();

@@ -12,6 +12,7 @@ import kr.hhplus.be.server.domain.user.UserService;
 import kr.hhplus.be.server.exception.InsufficientBalanceException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.UUID;
@@ -24,6 +25,7 @@ public class TokenFacade {
     private final TokenService tokenService;
     private final ConcertService concertService;
 
+    @Transactional
     public TokenResult createToken(UserCriteria criteria) throws InsufficientBalanceException {
         UUID userId = userService.getUserId(
                 UserCommand.builder().phoneNumber(criteria.phoneNumber()).build()
@@ -41,6 +43,7 @@ public class TokenFacade {
                 .build();
     }
 
+    @Transactional
     public void manageToken() {
         List<Long> concertIds = concertService.concertList().stream().map(Concert::getConcertId).toList();
 

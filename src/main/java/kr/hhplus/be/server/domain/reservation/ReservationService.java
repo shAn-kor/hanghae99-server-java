@@ -51,4 +51,17 @@ public class ReservationService {
     public List<ReservationItem> getReservedItems(ReservationCommand command) {
         return reservationRepository.getReservedItems(command.concertScheduleId());
     }
+
+    @Transactional(readOnly = true)
+    public void checkStatus(ReservationIdCommand reservationIdCommand) throws IllegalAccessException {
+        Reservation reservation = reservationRepository.getReservation(reservationIdCommand.reservationId());
+        reservation.checkReserved();
+    }
+
+    @Transactional
+    public void endReserve(ReservationIdCommand build) {
+        Reservation reservation = reservationRepository.getReservation(build.reservationId());
+        reservation.reserve();
+        reservationRepository.save(reservation);
+    }
 }

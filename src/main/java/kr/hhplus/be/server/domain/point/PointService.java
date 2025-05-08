@@ -16,6 +16,7 @@ public class PointService {
         return pointRepository.getPoint(command.userId());
     }
 
+    @Transactional(readOnly = true)
     public void checkPoint (PointCommand command) throws InsufficientBalanceException {
         Point point = getPointByUserId(command);
 
@@ -24,12 +25,14 @@ public class PointService {
         }
     }
 
+    @Transactional
     public void chargePoint(PointCommand command) {
         Point point = getPointByUserId(command);
         point.charge(command.point());
         pointRepository.save(point);
     }
 
+    @Transactional
     public void usePoint(PointCommand command) {
         Point point = getPointByUserId(command);
         point.use(command.point());

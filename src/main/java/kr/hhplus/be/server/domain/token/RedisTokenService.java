@@ -24,17 +24,18 @@ public class RedisTokenService implements TokenService {
 
     @Override
     @Transactional
+//    @DistributedLock(prefix = "token", key = "#command.userId()")
     public Token generateToken(TokenCommand command) {
         UUID userId = command.userId();
         Long concertId = command.concertId();
 
-        String queueKey = QUEUE_KEY_PREFIX + concertId;
+        String queueKey = QUEUE_KEY_PREFIX + concertId.toString();
         String setKey = queueKey + ":set";
-        String infoKey = queueKey + ":info:" + userId;
+        String infoKey = queueKey + ":info:" + userId.toString();
         String activeKey = ACTIVE_PREFIX + ":" + concertId + ":";
 
         // 중복 체크
-        Boolean alreadyInQueue = redisTemplate.opsForSet().isMember(setKey, command.concertId());
+        Boolean alreadyInQueue = redisTemplate.opsForSet().isMember(setKey, userId.toString());
         if (alreadyInQueue) {
             return this.getToken(command);
         }
@@ -69,11 +70,11 @@ public class RedisTokenService implements TokenService {
         UUID userId = tokenCommand.userId();
         Long concertId = tokenCommand.concertId();
 
-        String queueKey = "queue:concert:" + concertId;
-        String infoKey = queueKey + ":info:" + userId;
+        String queueKey = "queue:concert:" + concertId.toString();
+        String infoKey = queueKey + ":info:" + userId.toString();
 
         // Redis에 대기 정보가 없으면 null 반환 또는 예외 처리
-        Boolean isQueued = redisTemplate.opsForSet().isMember(queueKey + ":set", userId);
+        Boolean isQueued = redisTemplate.opsForSet().isMember(queueKey + ":set", userId.toString());
         if (Boolean.FALSE.equals(isQueued)) {
             throw new IllegalStateException("대기열에 존재하지 않는 사용자입니다.");
         }
@@ -86,7 +87,7 @@ public class RedisTokenService implements TokenService {
 
         // 대기 순서 계산
         List<String> queue = redisTemplate.opsForList().range(queueKey, 0, -1);
-        int position = queue != null ? queue.indexOf(userId) + 1 : -1;
+        int position = queue != null ? queue.indexOf(userId.toString()) + 1 : -1;
 
         // Redis 기반 임시 Token 객체 생성 (DB 저장은 하지 않음)
         return Token.builder()
@@ -104,7 +105,7 @@ public class RedisTokenService implements TokenService {
         UUID userId = command.userId();
         Long concertId = command.concertId();
 
-        String activeKey = "active:concert:" + concertId;
+        String activeKey = ACTIVE_PREFIX + ":" + concertId + ":";
 
         boolean isActive = Boolean.TRUE.equals(redisTemplate.opsForSet().isMember(activeKey, userId.toString()));
         if (!isActive) {
@@ -122,8 +123,8 @@ public class RedisTokenService implements TokenService {
         String setKey = queueKey + ":set";
         String infoKey = queueKey + ":info:" + userId;
 
-        redisTemplate.opsForList().remove(queueKey, 1, userId);
-        redisTemplate.opsForSet().remove(setKey, userId);
+        redisTemplate.opsForList().remove(queueKey, 1, userId.toString());
+        redisTemplate.opsForSet().remove(setKey, userId.toString());
         redisTemplate.delete(infoKey);
     }
 
@@ -132,7 +133,7 @@ public class RedisTokenService implements TokenService {
     public void fillActiveQueue(TokenCommand command) {
         Long concertId = command.concertId();
 
-        String queueKey = QUEUE_KEY_PREFIX + concertId;
+        String queueKey = QUEUE_KEY_PREFIX + concertId.toString();
         String activeKey = ACTIVE_PREFIX + ":" + concertId + ":";
 
         Long activeSize = redisTemplate.opsForSet().size(activeKey);
@@ -146,7 +147,7 @@ public class RedisTokenService implements TokenService {
 
         for (String id : queue) {
             UUID uuid = UUID.fromString(id);
-            if (redisTemplate.opsForSet().isMember(activeKey, uuid)) continue;
+            if (redisTemplate.opsForSet().isMember(activeKey, uuid.toString())) continue;
 
             // 전체 대기열에서 제거
             redisTemplate.opsForList().remove(queueKey, 1, id);
@@ -163,6 +164,6 @@ public class RedisTokenService implements TokenService {
         Long concertId = command.concertId();
         String activeKey = ACTIVE_PREFIX + ":" + concertId + ":";
 
-        redisTemplate.opsForSet().remove(activeKey, userId);
+        redisTemplate.opsForSet().remove(activeKey, userId.toString());
     }
 }

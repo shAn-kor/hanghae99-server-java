@@ -57,6 +57,7 @@ class ReservationServiceConcurrencyTest {
         CountDownLatch latch = new CountDownLatch(threadCount);
 
         ReservationCommand command = new ReservationCommand(
+                null,
                 userId,
                 concertScheduleId,
                 ReservationStatus.WAITING,
