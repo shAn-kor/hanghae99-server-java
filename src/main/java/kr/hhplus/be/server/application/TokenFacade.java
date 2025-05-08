@@ -1,5 +1,7 @@
 package kr.hhplus.be.server.application;
 
+import kr.hhplus.be.server.domain.concert.Concert;
+import kr.hhplus.be.server.domain.concert.ConcertService;
 import kr.hhplus.be.server.domain.point.PointCommand;
 import kr.hhplus.be.server.domain.point.PointService;
 import kr.hhplus.be.server.domain.token.Token;
@@ -11,6 +13,7 @@ import kr.hhplus.be.server.exception.InsufficientBalanceException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -19,6 +22,7 @@ public class TokenFacade {
     private final PointService pointService;
     private final UserService userService;
     private final TokenService tokenService;
+    private final ConcertService concertService;
 
     public TokenResult createToken(UserCriteria criteria) throws InsufficientBalanceException {
         UUID userId = userService.getUserId(
@@ -27,7 +31,7 @@ public class TokenFacade {
 
         pointService.checkPoint(PointCommand.builder().point(0L).userId(userId).build());
 
-        Token token = tokenService.generateToken(TokenCommand.builder().userId(userId).build());
+        Token token = tokenService.generateToken(TokenCommand.builder().userId(userId).concertId(criteria.concertId()).build());
 
         return TokenResult.builder()
                 .userId(userId)
@@ -35,6 +39,14 @@ public class TokenFacade {
                 .valid(token.getValid())
                 .createdAt(token.getCreatedAt())
                 .build();
+    }
+
+    public void manageToken() {
+        List<Long> concertIds = concertService.concertList().stream().map(Concert::getConcertId).toList();
+
+        for (Long concertId : concertIds) {
+            tokenService.fillActiveQueue(TokenCommand.builder().concertId(concertId).build());
+        }
     }
 
 }
