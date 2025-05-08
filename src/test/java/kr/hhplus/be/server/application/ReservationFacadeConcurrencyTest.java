@@ -2,15 +2,16 @@ package kr.hhplus.be.server.application;
 
 import kr.hhplus.be.server.domain.reservation.Reservation;
 import kr.hhplus.be.server.infrastructure.repository.ReservationRepository;
-import kr.hhplus.be.server.infrastructure.repository.SeatRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 import org.springframework.transaction.annotation.Transactional;
+import org.testcontainers.containers.GenericContainer;
 import org.testcontainers.containers.MySQLContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
@@ -42,6 +43,16 @@ public class ReservationFacadeConcurrencyTest {
         registry.add("spring.datasource.password", mysql::getPassword);
     }
 
+    @Container
+    static GenericContainer<?> redisContainer = new GenericContainer<>("redis:7.0")
+            .withExposedPorts(6379);
+
+    @DynamicPropertySource
+    static void redisProperties(DynamicPropertyRegistry registry) {
+        registry.add("spring.redis.host", redisContainer::getHost);
+        registry.add("spring.redis.port", () -> redisContainer.getMappedPort(6379));
+    }
+
     @Autowired
     private ReservationFacade reservationFacade;
 
@@ -49,7 +60,7 @@ public class ReservationFacadeConcurrencyTest {
     private ReservationRepository reservationRepository;
 
     @Autowired
-    private SeatRepository seatRepository;
+    private StringRedisTemplate redisTemplate;
 
     private final int THREAD_COUNT = 10;
     private UUID testUserId;
@@ -64,6 +75,10 @@ public class ReservationFacadeConcurrencyTest {
         testConcertScheduleId = 1L;
         venueId = 1L;
         testSeatId = 100L;
+
+        String activeKey = "active:concert:" + 1L;
+
+        redisTemplate.opsForSet().add(activeKey, testUserId.toString());
     }
 
     @Test
