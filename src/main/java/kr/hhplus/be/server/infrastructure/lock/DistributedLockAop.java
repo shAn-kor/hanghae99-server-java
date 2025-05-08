@@ -34,9 +34,9 @@ public class DistributedLockAop {
         DistributedLock distributedLock = method.getAnnotation(DistributedLock.class);
 
         String prefix = distributedLock.prefix(); // 예: "reservation:seat"
-        String dynamicValue;
+        Object dynamicValue;
         try {
-            dynamicValue = (String) CustomSpringELParser.getDynamicValue(
+            dynamicValue = CustomSpringELParser.getDynamicValue(
                     signature.getParameterNames(),
                     joinPoint.getArgs(),
                     distributedLock.key()
@@ -48,7 +48,7 @@ public class DistributedLockAop {
             throw new IllegalArgumentException("SpEL 표현식 파싱 중 오류 발생", e);
         }
 
-        String key = LOCK_KEY_PREFIX + prefix + ":" + dynamicValue;
+        String key = LOCK_KEY_PREFIX + prefix + ":" + dynamicValue.toString();
         RLock rLock = redissonClient.getLock(key);
 
         boolean locked = false;
