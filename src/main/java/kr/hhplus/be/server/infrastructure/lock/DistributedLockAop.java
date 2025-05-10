@@ -27,6 +27,8 @@ public class DistributedLockAop {
 
     private final RedissonClient redissonClient;
 
+    private final AopForTransaction aopForTransaction;
+
     @Around("@annotation(kr.hhplus.be.server.infrastructure.lock.DistributedLock)")
     public Object lock(ProceedingJoinPoint joinPoint) throws Throwable {
         MethodSignature signature = (MethodSignature) joinPoint.getSignature();
@@ -64,7 +66,7 @@ public class DistributedLockAop {
 
             registerLockReleaseAfterTransactionCommit(rLock);
 
-            return joinPoint.proceed();
+            return aopForTransaction.proceed(joinPoint);
         } catch (InterruptedException e) {
             throw new RuntimeException("락 획득 중 인터럽트 발생", e);
         } finally {

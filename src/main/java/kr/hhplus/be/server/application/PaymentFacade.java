@@ -11,7 +11,6 @@ import kr.hhplus.be.server.domain.token.TokenService;
 import kr.hhplus.be.server.infrastructure.lock.DistributedLock;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -21,8 +20,7 @@ public class PaymentFacade {
     private final PointService pointService;
     private final TokenService tokenService;
 
-    @DistributedLock(prefix = "payment", key = "#criteria.userId()", waitTime = 0L)
-    @Transactional
+    @DistributedLock(prefix = "payment", key = "#criteria.userId()", waitTime = 0)
     public void paySeat(PaymentCriteria criteria) {
         try {
             reservationService.checkStatus(ReservationIdCommand.builder().reservationId(criteria.reservationId()).build());
