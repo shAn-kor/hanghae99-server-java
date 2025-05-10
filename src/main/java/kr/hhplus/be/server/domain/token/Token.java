@@ -32,6 +32,9 @@ public class Token {
     @Min(1)
     private Integer position;
 
+    @Column(name = "concert_id", columnDefinition = "long")
+    private Long concertId;
+
     @Column(name = "valid", columnDefinition = "boolean")
     private Boolean valid;
 
@@ -40,12 +43,13 @@ public class Token {
     private LocalDateTime createdAt;
 
     @Builder
-    public Token( UUID userId, Integer position, Boolean valid, LocalDateTime createdAt) {
+    public Token( UUID userId, Long concertId, Integer position, Boolean valid, LocalDateTime createdAt) {
         if (userId == null) throw new IllegalArgumentException("userId must not be null");
         if (position == null || position < 0) throw new IllegalArgumentException("position must be >= 0");
         if (valid == null) throw new IllegalArgumentException("valid must not be null");
 
         this.userId = userId;
+        this.concertId = concertId;
         this.position = position;
         this.valid = valid;
         this.createdAt = createdAt;

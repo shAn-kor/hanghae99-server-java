@@ -62,4 +62,14 @@ public class Reservation {
         this.status = status;
         this.createdAt = LocalDateTime.now();
     }
+
+    public void checkReserved() throws IllegalAccessException {
+        if (this.status == ReservationStatus.RESERVED) {
+            throw new IllegalAccessException("Already Reserved");
+        }
+    }
+
+    public void reserve() {
+        this.status = ReservationStatus.RESERVED;
+    }
 }

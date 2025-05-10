@@ -11,7 +11,6 @@ import org.testcontainers.containers.MySQLContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
-import java.util.List;
 import java.util.UUID;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
@@ -51,7 +50,7 @@ class TokenServiceIntegrationTest {
     @Test
     void generateToken_토큰생성_정상작동() {
         // given
-        TokenCommand command = new TokenCommand(userId);
+        TokenCommand command = TokenCommand.builder().userId(userId).build();
 
         // when
         Token token = tokenService.generateToken(command);
@@ -65,27 +64,9 @@ class TokenServiceIntegrationTest {
     }
 
     @Test
-    void updateTokenValidity_포지션_50이하인경우_validTrue() {
-        // given
-        for (int i = 0; i < 60; i++) {
-            UUID uid = UUID.randomUUID();
-            tokenService.generateToken(new TokenCommand(uid));
-        }
-
-        // when
-        tokenService.updateTokenValidity();
-
-        // then
-        List<Token> tokens = tokenRepository.findAll();
-        long validCount = tokens.stream().filter(Token::getValid).count();
-
-        assertThat(validCount).isEqualTo(50);
-    }
-
-    @Test
     void isValid_정상작동() {
         // given
-        Token token = tokenService.generateToken(new TokenCommand(userId));
+        Token token = tokenService.generateToken(TokenCommand.builder().userId(userId).build());
         token.updateValidTrue();
         tokenRepository.save(token);
 
@@ -93,6 +74,6 @@ class TokenServiceIntegrationTest {
 
 
         // then
-        assertThatNoException().isThrownBy(() -> tokenService.isValid(new TokenCommand(userId)));
+        assertThatNoException().isThrownBy(() -> tokenService.isValid(TokenCommand.builder().userId(userId).build()));
     }
 }

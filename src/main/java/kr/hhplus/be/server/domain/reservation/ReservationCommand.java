@@ -8,6 +8,7 @@ import java.util.UUID;
 
 @Builder
 public record ReservationCommand(
+        Long reservationId,
         UUID userId,
         Long concertScheduleId,
         ReservationStatus status,

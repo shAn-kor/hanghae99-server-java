@@ -1,6 +1,6 @@
 package kr.hhplus.be.server.domain.reservation;
 
-import kr.hhplus.be.server.application.dto.ReservationResult;
+import kr.hhplus.be.server.application.ReservationResult;
 import kr.hhplus.be.server.infrastructure.repository.ReservationRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -59,6 +59,7 @@ class ReservationServiceIntegrationTest {
         itemCommands.add(new ReservationItemCommand( 11L));
 
         ReservationCommand command = new ReservationCommand(
+                null,
                 userId,
                 1L,
                 ReservationStatus.WAITING,
@@ -74,24 +75,6 @@ class ReservationServiceIntegrationTest {
         assertThat(reservations).isNotEmpty();
         Reservation saved = reservations.get(0);
         assertThat(reservationRepository.getItems(saved.getReservationId())).hasSize(2);
-    }
-
-    @Test
-    void getDeadItems_마감시간이전_예약아이템_조회() {
-        // given
-        LocalDateTime deadline = LocalDateTime.now().plusMinutes(3);
-        DeadlineItemCriteria criteria = new DeadlineItemCriteria(deadline);
-
-        Reservation reservation = reservationRepository.save(
-                Reservation.builder().userId(userId).status(ReservationStatus.RESERVED).build()
-        );
-        reservationRepository.saveItem(new ReservationItem(reservation, 1L));
-
-        // when
-        List<ReservationItem> result = reservationService.getDeadItems(criteria);
-
-        // then
-        assertThat(result).isNotEmpty();
     }
 
     @Test

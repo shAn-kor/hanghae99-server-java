@@ -1,6 +1,6 @@
 package kr.hhplus.be.server.domain.concertschedule;
 
-import kr.hhplus.be.server.domain.Venue.Venue;
+import kr.hhplus.be.server.domain.venue.Venue;
 import kr.hhplus.be.server.domain.concert.Concert;
 import kr.hhplus.be.server.domain.concert.ConcertCommand;
 import kr.hhplus.be.server.infrastructure.repository.ConcertScheduleRepository;

@@ -1,6 +1,6 @@
 package kr.hhplus.be.server.domain.concertschedule;
 
-import kr.hhplus.be.server.domain.Venue.Venue;
+import kr.hhplus.be.server.domain.venue.Venue;
 import kr.hhplus.be.server.infrastructure.repository.ConcertScheduleRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;

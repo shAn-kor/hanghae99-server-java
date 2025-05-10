@@ -33,7 +33,7 @@ class TokenControllerTest {
     @DisplayName("getToken()은 유저 전화번호로 토큰을 생성 요청한다")
     void getToken_success() {
         // given
-        GenerateTokenRequest request = new GenerateTokenRequest("010-1234-5678");
+        GenerateTokenRequest request = GenerateTokenRequest.builder().phoneNumber("010-1234-5678").build();
 
         // when
         var response = tokenController.getToken(request);
@@ -52,10 +52,10 @@ class TokenControllerTest {
         UUID tokenId = UUID.randomUUID();
         TokenRequest request = new TokenRequest(userId);
 
-        Token mockToken = new Token( userId, 5, true, LocalDateTime.now());
+        Token mockToken = new Token( userId, 1L, 5, true, LocalDateTime.now());
 
         // ✅ 여기에서 ResponseEntity 말고 Token 자체를 반환해야 함
-        when(tokenService.getToken(new TokenCommand(userId))).thenReturn(mockToken);
+        when(tokenService.getToken(TokenCommand.builder().userId(userId).build())).thenReturn(mockToken);
 
         // when
         var response = tokenController.getStatus(request);

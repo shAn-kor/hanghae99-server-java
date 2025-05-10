@@ -110,8 +110,8 @@ VALUES (1, 1, 1, NOW() + INTERVAL 7 DAY),
 
 -- Reservation 샘플 데이터
 INSERT INTO reservation (reservation_id, user_id, status, created_at)
-VALUES (1, UNHEX(REPLACE(UUID(), '-', '')), 'WAITING', CURRENT_TIMESTAMP),
-       (2, UNHEX(REPLACE(UUID(), '-', '')), 'RESERVED', CURRENT_TIMESTAMP);
+VALUES (1, UUID_TO_BIN('11111111-1111-1111-1111-111111111111', 1), 'WAITING', CURRENT_TIMESTAMP),
+       (2, UUID_TO_BIN('11111111-1111-1111-1111-111111111111', 1), 'RESERVED', CURRENT_TIMESTAMP);
 
 -- ReservationItem 샘플 데이터
 INSERT INTO reservation_item (reservation_id, seat_id)
@@ -127,3 +127,6 @@ VALUES (UUID_TO_BIN('11111111-1111-1111-1111-111111111111', 1), '010-1234-5678',
 
 insert into token (token_id, user_id, position, valid, created_at)
 values (UUID_TO_BIN('11111111-1111-1111-1111-111111111111', 1),UUID_TO_BIN('11111111-1111-1111-1111-111111111111', 1),1,true,current_timestamp);
+
+insert into point (user_id, balance)
+values(UUID_TO_BIN('11111111-1111-1111-1111-111111111111', 1), 1000);

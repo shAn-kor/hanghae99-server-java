@@ -1,7 +1,6 @@
 package kr.hhplus.be.server.application;
 
-import kr.hhplus.be.server.application.dto.TokenResult;
-import kr.hhplus.be.server.application.dto.UserCriteria;
+import kr.hhplus.be.server.domain.concert.ConcertService;
 import kr.hhplus.be.server.domain.point.PointService;
 import kr.hhplus.be.server.domain.token.Token;
 import kr.hhplus.be.server.domain.token.TokenCommand;
@@ -25,6 +24,7 @@ class TokenFacadeTest {
     private PointService pointService;
     private UserService userService;
     private TokenService tokenService;
+    private ConcertService concertService;
     private TokenFacade tokenFacade;
 
     @BeforeEach
@@ -32,7 +32,8 @@ class TokenFacadeTest {
         pointService = mock(PointService.class);
         userService = mock(UserService.class);
         tokenService = mock(TokenService.class);
-        tokenFacade = new TokenFacade(pointService, userService, tokenService);
+        concertService = mock(ConcertService.class);
+        tokenFacade = new TokenFacade(pointService, userService, tokenService, concertService);
     }
 
     @Test
@@ -40,11 +41,11 @@ class TokenFacadeTest {
     void createToken_success() throws InsufficientBalanceException {
         // given
         String phone = "010-1234-5678";
-        UserCriteria criteria = new UserCriteria(phone);
+        UserCriteria criteria = UserCriteria.builder().phoneNumber(phone).build();
 
         UUID userId = UUID.randomUUID();
         UUID tokenId = UUID.randomUUID();
-        Token token = new Token( userId, 5, true, LocalDateTime.now());
+        Token token = new Token( userId, 1L,5, true, LocalDateTime.now());
 
         when(userService.getUserId(any(UserCommand.class))).thenReturn(userId);
         when(tokenService.generateToken(any(TokenCommand.class))).thenReturn(token);
@@ -68,7 +69,7 @@ class TokenFacadeTest {
     void createToken_insufficientBalance() {
         // given
         String phone = "010-1234-5678";
-        UserCriteria criteria = new UserCriteria(phone);
+        UserCriteria criteria = UserCriteria.builder().phoneNumber(phone).build();
 
         UUID userId = UUID.randomUUID();
 

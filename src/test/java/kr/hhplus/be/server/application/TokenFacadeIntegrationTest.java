@@ -1,7 +1,5 @@
 package kr.hhplus.be.server.application;
 
-import kr.hhplus.be.server.application.dto.TokenResult;
-import kr.hhplus.be.server.application.dto.UserCriteria;
 import kr.hhplus.be.server.domain.point.Point;
 import kr.hhplus.be.server.domain.user.User;
 import kr.hhplus.be.server.exception.InsufficientBalanceException;
@@ -81,7 +79,7 @@ class TokenFacadeIntegrationTest {
     @DisplayName("토큰 생성 성공")
     void createToken_성공() throws Exception {
         // given
-        UserCriteria criteria = new UserCriteria(phoneNumber);
+        UserCriteria criteria = UserCriteria.builder().phoneNumber(phoneNumber).build();
 
         // when
         TokenResult result = tokenFacade.createToken(criteria);
@@ -113,7 +111,7 @@ class TokenFacadeIntegrationTest {
                         .balance(0L)
                         .build()
         );
-        UserCriteria criteria = new UserCriteria(phoneNumber);
+        UserCriteria criteria = UserCriteria.builder().phoneNumber(phoneNumber).build();
 
         // expect
         assertThatThrownBy(() -> tokenFacade.createToken(criteria))

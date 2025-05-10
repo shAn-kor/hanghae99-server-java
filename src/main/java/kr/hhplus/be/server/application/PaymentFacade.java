@@ -1,7 +1,5 @@
 package kr.hhplus.be.server.application;
 
-import kr.hhplus.be.server.application.dto.PaymentCriteria;
-import kr.hhplus.be.server.application.dto.ReservationResult;
 import kr.hhplus.be.server.domain.payment.PaymentCommand;
 import kr.hhplus.be.server.domain.payment.PaymentService;
 import kr.hhplus.be.server.domain.point.PointCommand;
@@ -10,8 +8,10 @@ import kr.hhplus.be.server.domain.reservation.ReservationIdCommand;
 import kr.hhplus.be.server.domain.reservation.ReservationService;
 import kr.hhplus.be.server.domain.token.TokenCommand;
 import kr.hhplus.be.server.domain.token.TokenService;
+import kr.hhplus.be.server.infrastructure.lock.DistributedLock;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -21,19 +21,29 @@ public class PaymentFacade {
     private final PointService pointService;
     private final TokenService tokenService;
 
+    @DistributedLock(prefix = "payment", key = "#criteria.userId()", waitTime = 0L)
+    @Transactional
     public void paySeat(PaymentCriteria criteria) {
-        ReservationResult result = reservationService.getTotalAmount(new ReservationIdCommand(criteria.reservationId()));
+        try {
+            reservationService.checkStatus(ReservationIdCommand.builder().reservationId(criteria.reservationId()).build());
+        } catch (IllegalAccessException e) {
+            throw new RuntimeException(e);
+        }
+
+        ReservationResult result = reservationService.getTotalAmount(ReservationIdCommand.builder().reservationId(criteria.reservationId()).build());
 
         PointCommand pointCommand = PointCommand.builder().userId(criteria.userId()).point(result.totalAmount()).build();
         pointService.checkPoint(pointCommand);
 
         pointService.usePoint(pointCommand);
 
-        tokenService.endToken(new TokenCommand(criteria.userId()));
+        tokenService.endActiveToken(TokenCommand.builder().userId(criteria.userId()).build());
 
         PaymentCommand paymentCommand = PaymentCommand.builder()
                 .reservationId(criteria.reservationId())
                 .amount(result.totalAmount()).build();
         paymentService.pay(paymentCommand);
+
+        reservationService.endReserve(ReservationIdCommand.builder().reservationId(criteria.reservationId()).build());
     }
 }

@@ -1,14 +1,12 @@
 package kr.hhplus.be.server.domain.reservation;
 
-import kr.hhplus.be.server.application.dto.ReservationResult;
+import kr.hhplus.be.server.application.ReservationResult;
 import kr.hhplus.be.server.infrastructure.repository.ReservationRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -35,24 +33,11 @@ public class ReservationService {
         reservationRepository.save(reservation);
     }
 
+    @Transactional
     public void unReserve(ReservationCommand command) {
         Reservation reservation = reservationRepository.findByUserIdAndConcertScheduleId(command.userId(), command.concertScheduleId()).get(0);
         reservation.setStatus(ReservationStatus.EMPTY);
         reservationRepository.save(reservation);
-    }
-
-    @Scheduled(fixedRate = 60000)
-    public void autoCancelReservation() {
-        LocalDateTime deadline = LocalDateTime.now().minusMinutes(3);
-        List<Reservation> expiredReservations = reservationRepository.getDeadReservations(deadline);
-        expiredReservations.forEach(reservation -> {
-            reservation.setStatus(ReservationStatus.EXPIRED);
-            reservationRepository.save(reservation);
-        });
-    }
-
-    public List<ReservationItem> getDeadItems(DeadlineItemCriteria deadlineItemCriteria) {
-        return reservationRepository.getDeadItems(deadlineItemCriteria.deadline());
     }
 
     @Transactional(readOnly = true)
@@ -65,5 +50,18 @@ public class ReservationService {
 
     public List<ReservationItem> getReservedItems(ReservationCommand command) {
         return reservationRepository.getReservedItems(command.concertScheduleId());
+    }
+
+    @Transactional(readOnly = true)
+    public void checkStatus(ReservationIdCommand reservationIdCommand) throws IllegalAccessException {
+        Reservation reservation = reservationRepository.getReservation(reservationIdCommand.reservationId());
+        reservation.checkReserved();
+    }
+
+    @Transactional
+    public void endReserve(ReservationIdCommand build) {
+        Reservation reservation = reservationRepository.getReservation(build.reservationId());
+        reservation.reserve();
+        reservationRepository.save(reservation);
     }
 }

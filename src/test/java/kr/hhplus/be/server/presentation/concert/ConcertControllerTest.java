@@ -1,7 +1,7 @@
 package kr.hhplus.be.server.presentation.concert;
 
-import kr.hhplus.be.server.domain.Venue.Venue;
-import kr.hhplus.be.server.domain.Venue.VenueService;
+import kr.hhplus.be.server.domain.venue.Venue;
+import kr.hhplus.be.server.domain.venue.VenueService;
 import kr.hhplus.be.server.domain.concert.Concert;
 import kr.hhplus.be.server.domain.concert.ConcertService;
 import kr.hhplus.be.server.domain.concertschedule.ConcertSchedule;

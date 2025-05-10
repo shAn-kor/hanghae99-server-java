@@ -1,7 +1,7 @@
 package kr.hhplus.be.server.application;
 
-import kr.hhplus.be.server.application.dto.ReservationCriteria;
 import kr.hhplus.be.server.domain.concertschedule.ConcertSchedule;
+import kr.hhplus.be.server.domain.concertschedule.ConcertScheduleCommand;
 import kr.hhplus.be.server.domain.concertschedule.ConcertScheduleService;
 import kr.hhplus.be.server.domain.reservation.*;
 import kr.hhplus.be.server.domain.seat.Seat;
@@ -9,6 +9,7 @@ import kr.hhplus.be.server.domain.seat.SeatCommand;
 import kr.hhplus.be.server.domain.seat.SeatService;
 import kr.hhplus.be.server.domain.token.TokenCommand;
 import kr.hhplus.be.server.domain.token.TokenService;
+import kr.hhplus.be.server.infrastructure.lock.DistributedLock;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,8 +26,11 @@ public class ReservationFacade {
     private final TokenService tokenService;
 
     @Transactional
+    @DistributedLock(prefix = "reservation:reserve", key = "#criteria.uuid()")
     public void reserveSeats(ReservationCriteria criteria) throws AccessDeniedException {
-        tokenService.isValid(TokenCommand.builder().userId(criteria.uuid()).build());
+        ConcertSchedule schedule = concertScheduleService.getConcertSchedule(ConcertScheduleCommand.builder().concertScheduleId(criteria.concertScheduleId()).build());
+
+        tokenService.isValid(TokenCommand.builder().userId(criteria.uuid()).concertId(schedule.getConcertId()).build());
 
         List<Seat> seatList = seatService.reserveSeat(ReservationCriteria.toSeatCommand(criteria));
 
@@ -47,6 +51,7 @@ public class ReservationFacade {
         reservationService.reserve(command);
     }
 
+    @Transactional(readOnly = true)
     public ReservationItemResult getEmptySeat(ReservationCriteria criteria) {
         ReservationCommand command = ReservationCriteria.toReservationCommand(criteria);
         List<ReservationItem> getReservedItems = reservationService.getReservedItems(command);

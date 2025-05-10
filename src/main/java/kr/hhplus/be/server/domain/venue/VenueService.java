@@ -1,4 +1,4 @@
-package kr.hhplus.be.server.domain.Venue;
+package kr.hhplus.be.server.domain.venue;
 
 import kr.hhplus.be.server.domain.concert.ConcertCommand;
 import kr.hhplus.be.server.infrastructure.repository.VenueRepository;

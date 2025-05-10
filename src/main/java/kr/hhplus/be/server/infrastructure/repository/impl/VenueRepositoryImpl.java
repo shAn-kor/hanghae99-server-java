@@ -1,6 +1,6 @@
 package kr.hhplus.be.server.infrastructure.repository.impl;
 
-import kr.hhplus.be.server.domain.Venue.Venue;
+import kr.hhplus.be.server.domain.venue.Venue;
 import kr.hhplus.be.server.infrastructure.jpa.JpaVenueRepository;
 import kr.hhplus.be.server.infrastructure.repository.VenueRepository;
 import lombok.RequiredArgsConstructor;
