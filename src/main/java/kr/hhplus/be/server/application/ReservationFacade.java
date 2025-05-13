@@ -25,7 +25,7 @@ public class ReservationFacade {
     private final SeatService seatService;
     private final TokenService tokenService;
 
-    @DistributedLock(prefix = "reservation:reserve", key = "#criteria.uuid()")
+    @DistributedLock(prefix = "reservation:reserve", key = "#criteria.concertScheduleId().concat('-').concertScheduleId()")
     public void reserveSeats(ReservationCriteria criteria) throws AccessDeniedException {
         ConcertSchedule schedule = concertScheduleService.getConcertSchedule(ConcertScheduleCommand.builder().concertScheduleId(criteria.concertScheduleId()).build());
 
