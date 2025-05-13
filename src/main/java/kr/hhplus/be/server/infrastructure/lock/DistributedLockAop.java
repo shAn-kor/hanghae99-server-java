@@ -11,11 +11,11 @@ import org.redisson.api.RLock;
 import org.redisson.api.RedissonClient;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.support.TransactionSynchronization;
-import org.springframework.transaction.support.TransactionSynchronizationManager;
 
 import java.lang.reflect.Method;
 import java.sql.SQLException;
+
+import static kr.hhplus.be.server.infrastructure.lock.TransactionSynchronization.registerLockReleaseAfterTransactionCommit;
 
 @Aspect
 @Component
@@ -75,38 +75,6 @@ public class DistributedLockAop {
             } catch (IllegalMonitorStateException e) {
                 log.info("Redisson Lock Already Unlock" + e.getMessage());
             }
-        }
-    }
-
-    private void registerLockReleaseAfterTransactionCommit(RLock rLock) {
-        if (TransactionSynchronizationManager.isSynchronizationActive()) {
-            TransactionSynchronizationManager.registerSynchronization(new TransactionSynchronization() {
-                @Override
-                public void afterCommit() {
-                    unlockQuietly(rLock);
-                }
-
-                @Override
-                public void afterCompletion(int status) {
-                    if (status != TransactionSynchronization.STATUS_COMMITTED) {
-                        // 롤백된 경우에도 락 해제
-                        unlockQuietly(rLock);
-                    }
-                }
-            });
-        } else {
-            // 트랜잭션이 없을 경우 즉시 해제
-            unlockQuietly(rLock);
-        }
-    }
-
-    private void unlockQuietly(RLock rLock) {
-        try {
-            if (rLock.isHeldByCurrentThread()) {
-                rLock.unlock();
-            }
-        } catch (IllegalMonitorStateException e) {
-            log.warn("Redisson Lock Already Released or Not Owned: {}", e.getMessage());
         }
     }
 }

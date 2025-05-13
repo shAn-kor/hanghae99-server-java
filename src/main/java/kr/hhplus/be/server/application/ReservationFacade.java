@@ -9,7 +9,7 @@ import kr.hhplus.be.server.domain.seat.SeatCommand;
 import kr.hhplus.be.server.domain.seat.SeatService;
 import kr.hhplus.be.server.domain.token.TokenCommand;
 import kr.hhplus.be.server.domain.token.TokenService;
-import kr.hhplus.be.server.infrastructure.lock.DistributedLock;
+import kr.hhplus.be.server.infrastructure.lock.MultiLock;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,7 +25,7 @@ public class ReservationFacade {
     private final SeatService seatService;
     private final TokenService tokenService;
 
-    @DistributedLock(prefix = "reservation:reserve", key = "#criteria.concertScheduleId().concat('-').concertScheduleId()")
+    @MultiLock(prefix = "'lock:reservation:' + #criteria.concertScheduleId + ':'", keyList = "#criteria.seatList()")
     public void reserveSeats(ReservationCriteria criteria) throws AccessDeniedException {
         ConcertSchedule schedule = concertScheduleService.getConcertSchedule(ConcertScheduleCommand.builder().concertScheduleId(criteria.concertScheduleId()).build());
 
