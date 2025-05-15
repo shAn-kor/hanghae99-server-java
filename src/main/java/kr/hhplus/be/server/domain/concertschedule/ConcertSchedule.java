@@ -19,7 +19,7 @@ public class ConcertSchedule {
 
     @Id
     @GeneratedValue
-    private Long id;
+    private Long concertScheduleId;
 
     @Column(name = "concert_id", columnDefinition = "bigint", updatable = false, nullable = false)
     private Long concertId;
