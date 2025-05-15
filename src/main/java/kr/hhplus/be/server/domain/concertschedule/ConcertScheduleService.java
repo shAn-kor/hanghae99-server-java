@@ -21,4 +21,13 @@ public class ConcertScheduleService {
     public ConcertSchedule getConcertSchedule(ConcertScheduleCommand concertScheduleCommand) {
         return concertScheduleRepository.getConcertSchedule(concertScheduleCommand.concertScheduleId());
     }
+
+    public Integer getTotalTicketCount(ConcertScheduleCommand command) {
+        List<ConcertSchedule> list = concertScheduleRepository.getConcertDates(command.concertId());
+        return list.size() * 50;
+    }
+
+    public List<Long> getConcertScheduleIdList(ConcertScheduleCommand command) {
+        return concertScheduleRepository.getConcertDates(command.concertId()).stream().map(ConcertSchedule::getConcertScheduleId).toList();
+    }
 }

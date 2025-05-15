@@ -7,6 +7,7 @@ import java.util.UUID;
 @Builder
 public record PointCommand(
         UUID userId,
+        Long pointId,
         Long point
 ) {
 
