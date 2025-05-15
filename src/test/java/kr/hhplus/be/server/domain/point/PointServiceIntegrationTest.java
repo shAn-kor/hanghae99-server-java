@@ -58,7 +58,7 @@ class PointServiceIntegrationTest {
     @Test
     @DisplayName("잔액 조회 테스트")
     void getPointByUserIdTest() {
-        PointCommand command = new PointCommand(userId, 0L);
+        PointCommand command = new PointCommand(userId, 1L,100L);
 
         Point result = pointService.getPointByUserId(command);
 
@@ -70,7 +70,7 @@ class PointServiceIntegrationTest {
     @Test
     @DisplayName("포인트 충전 성공 테스트")
     void chargePointTest() {
-        PointCommand command = new PointCommand(userId, 5000L);
+        PointCommand command = new PointCommand(userId, 1L,100L);
 
         pointService.chargePoint(command);
 
@@ -81,7 +81,7 @@ class PointServiceIntegrationTest {
     @Test
     @DisplayName("포인트 사용 성공 테스트")
     void usePointTest() {
-        PointCommand command = new PointCommand(userId, 4000L);
+        PointCommand command = new PointCommand(userId, 1L,100L);
 
         pointService.usePoint(command);
 
@@ -92,7 +92,7 @@ class PointServiceIntegrationTest {
     @Test
     @DisplayName("포인트 부족 시 예외 발생 테스트")
     void insufficientBalanceTest() {
-        PointCommand command = new PointCommand(userId, 20000L);
+        PointCommand command = new PointCommand(userId, 1L,100L);
 
         assertThrows(InsufficientBalanceException.class, () -> {
             pointService.checkPoint(command);

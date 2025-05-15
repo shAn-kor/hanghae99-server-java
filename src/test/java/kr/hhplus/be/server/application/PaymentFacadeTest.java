@@ -1,5 +1,7 @@
 package kr.hhplus.be.server.application;
 
+import kr.hhplus.be.server.domain.concert.ConcertRankingService;
+import kr.hhplus.be.server.domain.concertschedule.ConcertScheduleService;
 import kr.hhplus.be.server.domain.payment.PaymentCommand;
 import kr.hhplus.be.server.domain.payment.PaymentService;
 import kr.hhplus.be.server.domain.point.PointCommand;
@@ -22,8 +24,9 @@ class PaymentFacadeTest {
     private ReservationService reservationService;
     private PointService pointService;
     private TokenService tokenService;
-
     private PaymentFacade paymentFacade;
+    private ConcertScheduleService concertScheduleService;
+    private ConcertRankingService concertRankingService;
 
     @BeforeEach
     void setUp() {
@@ -31,8 +34,10 @@ class PaymentFacadeTest {
         reservationService = mock(ReservationService.class);
         pointService = mock(PointService.class);
         tokenService = mock(TokenService.class);
+        concertScheduleService = mock(ConcertScheduleService.class);
+        concertRankingService = mock(ConcertRankingService.class);
 
-        paymentFacade = new PaymentFacade(paymentService, reservationService, pointService, tokenService);
+        paymentFacade = new PaymentFacade(paymentService, reservationService, pointService, tokenService, concertScheduleService, concertRankingService);
     }
 
     @Test
@@ -53,8 +58,8 @@ class PaymentFacadeTest {
         paymentFacade.paySeat(criteria);
 
         // then
-        verify(pointService).checkPoint(new PointCommand(userId, totalAmount));
-        verify(pointService).usePoint(new PointCommand(userId, totalAmount));
+        verify(pointService).checkPoint(new PointCommand(userId, 1L, totalAmount));
+        verify(pointService).usePoint(new PointCommand(userId, 1L, totalAmount));
         verify(paymentService).pay(new PaymentCommand(reservationId, totalAmount));
     }
 

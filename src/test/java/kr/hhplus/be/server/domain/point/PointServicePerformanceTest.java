@@ -52,7 +52,7 @@ class PointServicePerformanceTest {
 
     @Test
     void 캐시_적용_전후_성능_차이_비교() {
-        PointCommand command = new PointCommand(USER_ID, 0L);
+        PointCommand command = new PointCommand(USER_ID, 1L,100L);
 
         // 1. 캐시 초기화 (강제로 비움)
         pointService.chargePoint(PointCommand.builder()
