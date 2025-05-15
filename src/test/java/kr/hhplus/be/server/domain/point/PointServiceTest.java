@@ -25,7 +25,7 @@ class PointServiceTest {
     @DisplayName("getPointByUserId()는 repository에서 Point를 반환한다")
     void getPointByUserId_success() {
         UUID userId = UUID.randomUUID();
-        PointCommand command = new PointCommand(userId, 100L);
+        PointCommand command = new PointCommand(userId, 1L,100L);
         Point mockPoint = new Point( userId, 1000L);
 
         when(pointRepository.getPoint(userId)).thenReturn(mockPoint);
@@ -40,7 +40,7 @@ class PointServiceTest {
     @DisplayName("checkPoint()는 Point 객체의 checkPoint를 호출한다")
     void checkPoint_success() {
         UUID userId = UUID.randomUUID();
-        PointCommand command = new PointCommand(userId, 0L);
+        PointCommand command = new PointCommand(userId, 1L,100L);
 
         Point mockPoint = mock(Point.class);
         when(pointRepository.getPoint(userId)).thenReturn(mockPoint);
@@ -55,7 +55,7 @@ class PointServiceTest {
     @DisplayName("chargePoint()는 Point 객체의 charge() 호출")
     void chargePoint_success() {
         UUID userId = UUID.randomUUID();
-        PointCommand command = new PointCommand(userId, 500L);
+        PointCommand command = new PointCommand(userId, 1L,100L);
 
         Point mockPoint = mock(Point.class);
         when(pointRepository.getPoint(userId)).thenReturn(mockPoint);
@@ -69,7 +69,7 @@ class PointServiceTest {
     @DisplayName("usePoint()는 Point 객체의 use() 호출")
     void usePoint_success() {
         UUID userId = UUID.randomUUID();
-        PointCommand command = new PointCommand(userId, 300L);
+        PointCommand command = new PointCommand(userId, 1L,100L);
 
         Point mockPoint = mock(Point.class);
         when(pointRepository.getPoint(userId)).thenReturn(mockPoint);

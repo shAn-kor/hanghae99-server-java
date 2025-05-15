@@ -4,6 +4,7 @@ import lombok.Builder;
 
 @Builder
 public record ConcertScheduleCommand(
-        Long concertScheduleId
+        Long concertScheduleId,
+        Long concertId
 ) {
 }

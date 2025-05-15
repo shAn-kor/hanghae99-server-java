@@ -59,9 +59,25 @@ public class ReservationService {
     }
 
     @Transactional
-    public void endReserve(ReservationIdCommand build) {
-        Reservation reservation = reservationRepository.getReservation(build.reservationId());
+    public void endReserve(ReservationIdCommand command) {
+        Reservation reservation = reservationRepository.getReservation(command.reservationId());
         reservation.reserve();
         reservationRepository.save(reservation);
     }
+
+    public boolean checkSoldOut(ReservationTotalCommand command) {
+        Integer reservationItemCount = 0;
+
+        for (Long concertScheduleId : command.concertScheduleIdList()) {
+            List<ReservationItem> reservationItems = reservationRepository.getReservedItems(concertScheduleId);
+            reservationItemCount += reservationItems.size();
+        }
+
+        return reservationItemCount.equals(command.totalTicketCount());
+    }
+
+    public Reservation getReservation(ReservationIdCommand command) {
+        return reservationRepository.getReservation(command.reservationId());
+    }
+
 }

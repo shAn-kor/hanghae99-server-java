@@ -6,7 +6,6 @@ import kr.hhplus.be.server.infrastructure.repository.TokenRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
 import java.util.UUID;
 
 @Repository
@@ -20,16 +19,6 @@ public class TokenRepositoryImpl implements TokenRepository {
     }
 
     @Override
-    public List<Token> findAll() {
-        return repository.findAll();
-    }
-
-    @Override
-    public List<Token> findValidTokens() {
-        return repository.findValidTokens();
-    }
-
-    @Override
     public Token save(Token token) {
         return repository.save(token);
     }
@@ -37,5 +26,30 @@ public class TokenRepositoryImpl implements TokenRepository {
     @Override
     public Integer getMaxPosition() {
         return repository.findMaxPosition();
+    }
+
+    @Override
+    public void fillActiveQueue(UUID uuid, Long aLong) {
+
+    }
+
+    @Override
+    public void endActiveToken(UUID uuid, Long aLong) {
+
+    }
+
+    @Override
+    public Token getToken(UUID uuid, Long aLong) {
+        return null;
+    }
+
+    @Override
+    public Token generateToken(UUID uuid, Long concertId) {
+        return null;
+    }
+
+    @Override
+    public void endToken(UUID uuid, Long aLong) {
+
     }
 }

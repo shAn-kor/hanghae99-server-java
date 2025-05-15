@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 @RequiredArgsConstructor
@@ -16,5 +17,10 @@ public class ConcertRepositoryImpl implements ConcertRepository {
     @Override
     public List<Concert> concertList() {
         return jpaConcertRepository.findAll();
+    }
+
+    @Override
+    public Optional<Concert> getConcert(Long concertId) {
+        return jpaConcertRepository.findById(concertId);
     }
 }
