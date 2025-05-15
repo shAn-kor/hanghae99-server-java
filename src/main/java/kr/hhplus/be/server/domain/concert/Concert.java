@@ -6,6 +6,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
+
 @Getter
 @Entity(name = "concert")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -21,6 +23,9 @@ public class Concert {
 
     @Column(name = "artist", columnDefinition = "varchar(50)")
     private String artist;
+
+    @Column(name = "ticket_time", columnDefinition = "timestamp")
+    private LocalDateTime ticketTime;
 
     @Builder
     public Concert(String concertName, String artist) {
