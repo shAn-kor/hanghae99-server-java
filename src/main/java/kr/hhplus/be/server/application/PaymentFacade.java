@@ -43,6 +43,5 @@ public class PaymentFacade {
         paymentService.pay(paymentCommand);
 
         reservationService.endReserve(ReservationIdCommand.builder().reservationId(criteria.reservationId()).build());
-
     }
 }
