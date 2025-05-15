@@ -13,7 +13,7 @@ import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
-public class RedisTokenService implements TokenService {
+public class RedisTokenService {
     private final StringRedisTemplate redisTemplate;
 
     private static final int MAX_ACTIVE = 50;
@@ -22,7 +22,7 @@ public class RedisTokenService implements TokenService {
     private static final String ACTIVE_PREFIX = "active:concert:";
 
 
-    @Override
+
     @Transactional
 //    @DistributedLock(prefix = "token", key = "#command.userId()")
     public Token generateToken(TokenCommand command) {
@@ -64,7 +64,7 @@ public class RedisTokenService implements TokenService {
                 .build();
     }
 
-    @Override
+
     @Transactional(readOnly = true)
     public Token getToken(TokenCommand tokenCommand) {
         UUID userId = tokenCommand.userId();
@@ -99,7 +99,7 @@ public class RedisTokenService implements TokenService {
                 .build();
     }
 
-    @Override
+
     @Transactional
     public void isValid(TokenCommand command) throws AccessDeniedException {
         UUID userId = command.userId();
@@ -113,7 +113,7 @@ public class RedisTokenService implements TokenService {
         }
     }
 
-    @Override
+
     @Transactional
     public void endToken(TokenCommand command) {
         UUID userId = command.userId();
@@ -128,7 +128,7 @@ public class RedisTokenService implements TokenService {
         redisTemplate.delete(infoKey);
     }
 
-    @Override
+
     @Transactional
     public void fillActiveQueue(TokenCommand command) {
         Long concertId = command.concertId();
@@ -157,7 +157,7 @@ public class RedisTokenService implements TokenService {
         }
     }
 
-    @Override
+
     @Transactional
     public void endActiveToken(TokenCommand command) {
         UUID userId = command.userId();
