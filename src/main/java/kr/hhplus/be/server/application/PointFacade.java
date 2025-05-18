@@ -1,6 +1,7 @@
 package kr.hhplus.be.server.application;
 
 import kr.hhplus.be.server.domain.point.Point;
+import kr.hhplus.be.server.domain.point.PointCommand;
 import kr.hhplus.be.server.domain.point.PointService;
 import kr.hhplus.be.server.domain.pointhistory.PointHistory;
 import kr.hhplus.be.server.domain.pointhistory.PointHistoryCommand;
@@ -34,8 +35,10 @@ public class PointFacade {
 
     @Transactional
     public void chargePoint(PointCriteria criteria) {
-        pointService.chargePoint(criteria.toPointCommand());
         Point point = pointService.getPointByUserId(criteria.toPointCommand());
+        PointCommand pointCommand = PointCommand.builder().userId(criteria.uuid()).pointId(point.getPointId()).point(criteria.point()).build();
+
+        pointService.chargePoint(pointCommand);
         PointHistoryCommand command = PointHistoryCommand.builder()
                 .pointId(point.getPointId())
                 .type(CHARGE)

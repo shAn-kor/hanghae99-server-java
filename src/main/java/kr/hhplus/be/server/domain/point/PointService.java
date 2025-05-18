@@ -1,6 +1,7 @@
 package kr.hhplus.be.server.domain.point;
 
 import kr.hhplus.be.server.exception.InsufficientBalanceException;
+import kr.hhplus.be.server.infrastructure.lock.DistributedLock;
 import kr.hhplus.be.server.infrastructure.repository.PointRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.CacheEvict;
@@ -30,6 +31,7 @@ public class PointService {
 
     @Transactional
     @CacheEvict(value = "userPoint", key = "#command.userId()")
+    @DistributedLock(prefix = "Point:Charge", key = "#command.pointId()")
     public void chargePoint(PointCommand command) {
         Point point = pointRepository.getPoint(command.userId());
         point.charge(command.point());
@@ -38,6 +40,7 @@ public class PointService {
 
     @Transactional
     @CacheEvict(value = "userPoint", key = "#command.userId()")
+    @DistributedLock(prefix = "Point:Charge", key = "#command.pointId()")
     public void usePoint(PointCommand command) {
         Point point = pointRepository.getPoint(command.userId());
         point.use(command.point());
