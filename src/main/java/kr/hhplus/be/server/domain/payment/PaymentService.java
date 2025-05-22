@@ -11,8 +11,9 @@ public class PaymentService {
     private final PaymentRepository paymentRepository;
 
     @Transactional
-    public void pay(PaymentCommand command) {
+    public Payment pay(PaymentCommand command) {
         Payment payment = Payment.builder().reservationId(command.reservationId()).amount(command.amount()).build();
         paymentRepository.savePayment(payment);
+        return payment;
     }
 }
