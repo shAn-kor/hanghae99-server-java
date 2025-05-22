@@ -5,8 +5,7 @@ import kr.hhplus.be.server.domain.concert.ConcertRankingService;
 import kr.hhplus.be.server.domain.concertschedule.ConcertSchedule;
 import kr.hhplus.be.server.domain.concertschedule.ConcertScheduleCommand;
 import kr.hhplus.be.server.domain.concertschedule.ConcertScheduleService;
-import kr.hhplus.be.server.domain.payment.PaymentCommand;
-import kr.hhplus.be.server.domain.payment.PaymentService;
+import kr.hhplus.be.server.domain.payment.*;
 import kr.hhplus.be.server.domain.point.Point;
 import kr.hhplus.be.server.domain.point.PointCommand;
 import kr.hhplus.be.server.domain.point.PointService;
@@ -33,6 +32,7 @@ public class PaymentFacade {
     private final TokenService tokenService;
     private final ConcertScheduleService concertScheduleService;
     private final ConcertRankingService concertRankingService;
+    private final PaymentEventPublisher paymentEventPublisher;
 
     @DistributedLock(prefix = "payment", key = "#criteria.reservationId()", waitTime = 0)
     public void paySeat(PaymentCriteria criteria) {
@@ -54,9 +54,12 @@ public class PaymentFacade {
         PaymentCommand paymentCommand = PaymentCommand.builder()
                 .reservationId(criteria.reservationId())
                 .amount(result.totalAmount()).build();
-        paymentService.pay(paymentCommand);
+        Payment payment = paymentService.pay(paymentCommand);
 
         reservationService.endReserve(ReservationIdCommand.builder().reservationId(criteria.reservationId()).build());
+
+        PaymentCompletedEvent event = PaymentCompletedEvent.builder().paymentId(payment.getPaymentId()).reservationId(payment.getReservationId()).build();
+        paymentEventPublisher.success(event);
 
         // ✅ 트랜잭션 커밋 이후 매진 여부 확인 및 Redis 랭킹 등록
         TransactionSynchronizationManager.registerSynchronization(new TransactionSynchronizationAdapter() {
