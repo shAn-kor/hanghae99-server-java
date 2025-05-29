@@ -4,9 +4,7 @@ import kr.hhplus.be.server.domain.concert.Concert;
 import kr.hhplus.be.server.domain.concert.ConcertService;
 import kr.hhplus.be.server.domain.point.PointCommand;
 import kr.hhplus.be.server.domain.point.PointService;
-import kr.hhplus.be.server.domain.token.Token;
-import kr.hhplus.be.server.domain.token.TokenCommand;
-import kr.hhplus.be.server.domain.token.TokenService;
+import kr.hhplus.be.server.domain.token.*;
 import kr.hhplus.be.server.domain.user.UserCommand;
 import kr.hhplus.be.server.domain.user.UserService;
 import kr.hhplus.be.server.exception.InsufficientBalanceException;
@@ -24,23 +22,17 @@ public class TokenFacade {
     private final UserService userService;
     private final TokenService tokenService;
     private final ConcertService concertService;
+    private final TokenEventPublisher tokenEventPublisher;
 
     @Transactional
-    public TokenResult createToken(UserCriteria criteria) throws InsufficientBalanceException {
+    public void createToken(UserCriteria criteria) throws InsufficientBalanceException {
         UUID userId = userService.getUserId(
                 UserCommand.builder().phoneNumber(criteria.phoneNumber()).build()
         );
 
         pointService.checkPoint(PointCommand.builder().point(0L).userId(userId).build());
 
-        Token token = tokenService.generateToken(TokenCommand.builder().userId(userId).concertId(criteria.concertId()).build());
-
-        return TokenResult.builder()
-                .userId(userId)
-                .position(token.getPosition())
-                .valid(token.getValid())
-                .createdAt(token.getCreatedAt())
-                .build();
+        tokenEventPublisher.publish(TokenEvent.builder().userId(userId).concertId(criteria.concertId()).build());
     }
 
     @Transactional
