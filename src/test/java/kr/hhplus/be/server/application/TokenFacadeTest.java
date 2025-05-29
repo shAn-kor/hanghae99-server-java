@@ -15,7 +15,6 @@ import org.junit.jupiter.api.Test;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.*;
 
@@ -51,13 +50,9 @@ class TokenFacadeTest {
         when(tokenService.generateToken(any(TokenCommand.class))).thenReturn(token);
 
         // when
-        TokenResult result = tokenFacade.createToken(criteria);
+        tokenFacade.createToken(criteria);
 
         // then
-        assertThat(result).isNotNull();
-        assertThat(result.userId()).isEqualTo(userId);
-        assertThat(result.position()).isEqualTo(token.getPosition());
-        assertThat(result.valid()).isTrue();
 
         verify(userService, times(1)).getUserId(any());
         verify(pointService, times(1)).checkPoint(any());

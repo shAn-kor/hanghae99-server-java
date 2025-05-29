@@ -82,13 +82,7 @@ class TokenFacadeIntegrationTest {
         UserCriteria criteria = UserCriteria.builder().phoneNumber(phoneNumber).build();
 
         // when
-        TokenResult result = tokenFacade.createToken(criteria);
-
-        // then
-        assertThat(result.userId()).isEqualTo(userId);
-        assertThat(result.position()).isGreaterThanOrEqualTo(0);
-        assertThat(result.valid()).isFalse(); // 초기값
-        assertThat(result.createdAt()).isBeforeOrEqualTo(LocalDateTime.now());
+        tokenFacade.createToken(criteria);
 
         // 실제 DB에도 저장되었는지 확인
         assertThat(tokenRepository.getToken(userId)).isNotNull();
