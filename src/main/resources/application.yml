@@ -44,6 +44,9 @@ spring:
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
       retries: 5
+      transaction-id-prefix: tx-queue-
+      properties:
+        enable.idempotence: true
     consumer:
       group-id: consumer
       key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
