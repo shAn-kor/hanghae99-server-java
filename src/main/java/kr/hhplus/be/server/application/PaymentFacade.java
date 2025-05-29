@@ -58,7 +58,12 @@ public class PaymentFacade {
 
         reservationService.endReserve(ReservationIdCommand.builder().reservationId(criteria.reservationId()).build());
 
-        PaymentCompletedEvent event = PaymentCompletedEvent.builder().paymentId(payment.getPaymentId()).reservationId(payment.getReservationId()).build();
+        PaymentCompletedEvent event = PaymentCompletedEvent.builder()
+                .paymentId(payment.getPaymentId())
+                .reservationId(payment.getReservationId())
+                .amount(result.totalAmount())
+                .paidAt(payment.getPaidAt())
+                .build();
         paymentEventPublisher.success(event);
 
         // ✅ 트랜잭션 커밋 이후 매진 여부 확인 및 Redis 랭킹 등록

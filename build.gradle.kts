@@ -51,11 +51,16 @@ dependencies {
 	testCompileOnly("org.projectlombok:lombok:1.18.30")
 	testAnnotationProcessor("org.projectlombok:lombok:1.18.30")
 
-    // Test
+	// Kafka
+	implementation ("org.springframework.kafka:spring-kafka")
+
+	// Test
     testImplementation("org.springframework.boot:spring-boot-starter-test")
 	testImplementation("org.springframework.boot:spring-boot-testcontainers")
 	testImplementation("org.testcontainers:junit-jupiter")
 	testImplementation("org.testcontainers:mysql")
+	testImplementation ("org.springframework.kafka:spring-kafka-test")
+	testImplementation("org.awaitility:awaitility:4.2.0")
 	testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 }
 
