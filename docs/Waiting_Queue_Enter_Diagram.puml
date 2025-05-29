@@ -1,0 +1,25 @@
+@startuml
+actor User
+participant "API Gateway" as APIGW
+participant "EntryService\n(Spring)" as EntryService
+participant "KafkaProducer" as Producer
+queue "Kafka Topic\n(waiting-entries)" as Kafka
+participant "EntryConsumer\n(Spring Kafka)" as Consumer
+database "Redis\n(대기열 큐)" as Redis
+
+User -> APIGW : POST /entry/request
+APIGW -> EntryService : 진입 요청 위임
+EntryService -> Producer : produce(entryEvent)
+Producer -> Kafka : send(entryEvent)
+Kafka --> Producer : ack
+Producer --> EntryService : 성공 응답
+EntryService --> APIGW : 200 OK
+APIGW --> User : 입장 요청 완료
+
+== 비동기 처리 ==
+
+Kafka -> Consumer : entryEvent 수신
+Consumer -> Redis : 대기열 큐에 등록 (ZADD 등)
+Consumer --> Kafka : commit offset
+
+@enduml
