@@ -3,6 +3,7 @@ package kr.hhplus.be.server.presentation.payment;
 import kr.hhplus.be.server.domain.payment.PaymentCompletedEvent;
 import kr.hhplus.be.server.infrastructure.kafka.KafkaProducer;
 import kr.hhplus.be.server.infrastructure.message.PaymentSuccessPayload;
+import kr.hhplus.be.server.presentation.KafkaPublishingException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Async;
