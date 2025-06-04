@@ -3,6 +3,7 @@ package kr.hhplus.be.server.domain.token;
 import kr.hhplus.be.server.infrastructure.repository.TokenRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.nio.file.AccessDeniedException;
 
@@ -11,6 +12,7 @@ import java.nio.file.AccessDeniedException;
 public class TokenService {
     private final TokenRepository tokenRepository;
 
+    @Transactional
     public Token generateToken(TokenCommand command) {
         return tokenRepository.generateToken(command.userId(), command.concertId());
     }
