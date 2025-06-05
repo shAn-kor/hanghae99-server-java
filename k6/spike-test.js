@@ -17,7 +17,7 @@ export default function () {
     const concertId = 1;
 
     const res = http.post(
-        'http://host.docker.internal:8080/token/getToken',
+        'http://localhost:8080/token/getToken',
         JSON.stringify({ phoneNumber, concertId }),
         { headers: { 'Content-Type': 'application/json' } }
     );

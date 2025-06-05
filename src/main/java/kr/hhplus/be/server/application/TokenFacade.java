@@ -8,6 +8,7 @@ import kr.hhplus.be.server.domain.token.*;
 import kr.hhplus.be.server.domain.user.UserCommand;
 import kr.hhplus.be.server.domain.user.UserService;
 import kr.hhplus.be.server.exception.InsufficientBalanceException;
+import kr.hhplus.be.server.presentation.KafkaPublishingException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,7 +26,7 @@ public class TokenFacade {
     private final TokenEventPublisher tokenEventPublisher;
 
     @Transactional
-    public void createToken(UserCriteria criteria) throws InsufficientBalanceException {
+    public void createToken(UserCriteria criteria) throws InsufficientBalanceException, KafkaPublishingException {
         UUID userId = userService.getUserId(
                 UserCommand.builder().phoneNumber(criteria.phoneNumber()).build()
         );
