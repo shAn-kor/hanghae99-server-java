@@ -6,6 +6,7 @@ import kr.hhplus.be.server.application.UserCriteria;
 import kr.hhplus.be.server.domain.token.Token;
 import kr.hhplus.be.server.domain.token.TokenCommand;
 import kr.hhplus.be.server.domain.token.TokenService;
+import kr.hhplus.be.server.presentation.KafkaPublishingException;
 import kr.hhplus.be.server.presentation.token.object.GenerateTokenRequest;
 import kr.hhplus.be.server.presentation.token.object.TokenRequest;
 import kr.hhplus.be.server.presentation.token.object.TokenResponse;
@@ -26,7 +27,7 @@ public class TokenController implements TokenApi {
     private final TokenService tokenService;
 
     @PostMapping("/getToken")
-    public ResponseEntity.BodyBuilder getToken(@Valid @RequestBody GenerateTokenRequest request) {
+    public ResponseEntity.BodyBuilder getToken(@Valid @RequestBody GenerateTokenRequest request) throws KafkaPublishingException {
         tokenFacade.createToken(new UserCriteria(request.phoneNumber(), request.concertId()));
         return ResponseEntity.ok();
     }

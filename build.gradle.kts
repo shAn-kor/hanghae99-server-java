@@ -54,6 +54,10 @@ dependencies {
 	// Kafka
 	implementation ("org.springframework.kafka:spring-kafka")
 
+	// micrometer + prometheus
+	implementation ("io.micrometer:micrometer-registry-prometheus")
+	implementation ("org.springframework.boot:spring-boot-starter-actuator")
+
 	// Test
     testImplementation("org.springframework.boot:spring-boot-starter-test")
 	testImplementation("org.springframework.boot:spring-boot-testcontainers")
