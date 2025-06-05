@@ -66,3 +66,9 @@ spring:
     url: jdbc:mysql://127.0.0.1:3307/hhplus?characterEncoding=UTF-8&serverTimezone=UTC
     username: application
     password: application
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: prometheus, health, info
