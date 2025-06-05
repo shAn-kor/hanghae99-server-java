@@ -1,0 +1,44 @@
+version: '3.7'
+services:
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: prometheus
+    volumes:
+      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+    ports:
+      - "9090:9090"
+
+  grafana:
+    image: grafana/grafana:latest
+    container_name: grafana
+    ports:
+      - "3000:3000"
+    volumes:
+      - grafana-storage:/var/lib/grafana
+    depends_on:
+      - prometheus
+
+  influxdb:
+    image: influxdb:1.8
+    container_name: influxdb
+    ports:
+      - "8086:8086"
+    environment:
+      - INFLUXDB_DB=k6
+      - INFLUXDB_ADMIN_USER=admin
+      - INFLUXDB_ADMIN_PASSWORD=admin123
+
+  k6:
+    image: grafana/k6
+    container_name: k6
+    depends_on:
+      - influxdb
+    entrypoint: ["k6", "run", "/scripts/test.js"]
+    stdin_open: true
+    tty: true
+    volumes:
+      - ./k6:/scripts
+    command: run /scripts/test.js
+
+volumes:
+  grafana-storage:
