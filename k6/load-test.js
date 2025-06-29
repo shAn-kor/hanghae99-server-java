@@ -16,7 +16,7 @@ export default function () {
 
     // 1. /token/getToken
     const res1 = http.post(
-        'http://host.docker.internal:8080/token/getToken',
+        'http://localhost:8080/token/getToken',
         JSON.stringify({ phoneNumber, concertId }),
         { headers: { 'Content-Type': 'application/json' } }
     );
@@ -30,7 +30,7 @@ export default function () {
     // 2. /token/status (3회 반복)
     for (let i = 0; i < 3; i++) {
         const statusRes = http.post(
-            'http://host.docker.internal:8080/token/status',
+            'http://localhost:8080/token/status',
             JSON.stringify({ userId }),
             { headers: { 'Content-Type': 'application/json' } }
         );
@@ -43,7 +43,7 @@ export default function () {
     const seatList = [10, 11]; // 임의 선택
 
     const reserveRes = http.post(
-        'http://host.docker.internal:8080/reservation/reserve',
+        'http://localhost:8080/reservation/reserve',
         JSON.stringify({
             uuid: userId,
             concertDateTimeId,
@@ -57,7 +57,7 @@ export default function () {
     // 4. /pay
     const reservationId = 1; // 실제로는 예약 응답에서 받아야 하나, 여기선 테스트 목적상 고정
     const payRes = http.post(
-        'http://host.docker.internal:8080/pay',
+        'http://localhost:8080/pay',
         JSON.stringify({ reservationId }),
         { headers: { 'Content-Type': 'application/json' } }
     );
